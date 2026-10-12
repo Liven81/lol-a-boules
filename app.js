@@ -54,8 +54,16 @@ document.querySelectorAll("[data-view]").forEach(button => {
     });
 });
 
+// 2. Verbinding met Supabase
+const SUPABASE_URL = "https://uldmdrhrrniynbgecsby.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_aHpSMc2mXDJRM-FBvJ1GDA_gMByWSNY";
 
-// 2. Beheerdersknop
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+// 3. Beheerdersknop
 document.getElementById("adminButton").addEventListener("click", async () => {
     const { data } = await supabaseClient.auth.getSession();
 
@@ -81,17 +89,6 @@ document.getElementById("adminButton").addEventListener("click", async () => {
     document.getElementById("login-venster").classList.remove("hidden");
     document.getElementById("login-email").focus();
 });
-
-
-// 3. Verbinding met Supabase
-const SUPABASE_URL = "https://uldmdrhrrniynbgecsby.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_aHpSMc2mXDJRM-FBvJ1GDA_gMByWSNY";
-
-const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-);
-
 
 // 4. Speellocaties ophalen
 async function laadLocaties() {
