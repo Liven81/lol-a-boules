@@ -270,3 +270,128 @@ function toonWedstrijdMelding(bericht) {
 }
 
 laadWedstrijdFormulier();
+
+// ========================================
+// Wedstrijd opslaan
+// ========================================
+
+document.getElementById("wedstrijd-form")?.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const knop = document.getElementById("wedstrijd-opslaan");
+    const melding = document.getElementById("wedstrijd-melding");
+
+    const thuisploeg = document.getElementById("thuisploeg").value;
+    const uitploeg = document.getElementById("uitploeg").value;
+    const datum = document.getElementById("wedstrijd-datum").value;
+    const uur = document.getElementById("wedstrijd-uur").value;
+    const locatie = document.getElementById("wedstrijd-locatie").value;
+    const plein = document.getElementById("wedstrijd-plein").value;
+
+    // Oude melding wissen
+    melding.textContent = "";
+    melding.classList.add("hidden");
+
+    // Controleren of beide ploegen verschillend zijn
+    if (thuisploeg === uitploeg) {
+        toonWedstrijdMelding(
+            "Een ploeg kan niet tegen zichzelf spelen. Kies twee verschillende ploegen."
+        );
+        return;
+    }
+
+    // Controleren of alle gegevens ingevuld zijn
+    if (!thuisploeg || !uitploeg || !datum || !uur || !locatie || !plein) {
+        toonWedstrijdMelding(
+            "Vul alle gegevens in voordat je de wedstrijd plant."
+        );
+        return;
+    }
+
+    // Datum en uur omzetten naar een tijdstip
+    const startTijd = new Date(`${datum}T${uur}`);
+
+    if (Number.isNaN(startTijd.getTime())) {
+        toonWedstrijdMelding("De datum of het startuur is ongeldig.");
+        return;
+    }
+
+    if (startTijd <= new Date()) {
+        toonWedstrijdMelding(
+            "Kies een datum en startuur in de toekomst."
+        );
+        return;
+    }
+
+    // Knop tijdelijk uitschakelen om dubbel klikken te voorkomen
+    knop.disabled = true;
+    knop.textContent = "Wedstrijd opslaan...";
+
+    try {
+        // De competitie ophalen
+        const { data: competities, error: competitieFout } =
+            await supabaseClient
+                .from("competitions")
+                .select("id")
+                .eq("season_year", 2027)
+                .limit(1);
+
+        if (competitieFout) {
+            throw competitieFout;
+        }
+
+        if (!competities || competities.length === 0) {
+            throw new Error("De competitie van 2027 werd niet gevonden.");
+        }
+
+        // De wedstrijd opslaan
+        const { error: opslaanFout } = await supabaseClient
+            .from("matches")
+            .insert({
+                competition_id: competities[0].id,
+                home_team_id: thuisploeg,
+                away_team_id: uitploeg,
+                scheduled_at: startTijd.toISOString(),
+                court_id: plein
+            });
+
+        if (opslaanFout) {
+            throw opslaanFout;
+        }
+
+        // Gelukt!
+        toonWedstrijdMelding(
+            "De wedstrijd is succesvol gepland! Je kunt hieronder een nieuwe wedstrijd plannen."
+        );
+
+        // Het formulier leegmaken
+        document.getElementById("wedstrijd-form").reset();
+
+        // Speelplein opnieuw uitschakelen tot er een locatie gekozen is
+        const pleinSelect = document.getElementById("wedstrijd-plein");
+        pleinSelect.innerHTML =
+            '<option value="">Kies eerst een locatie</option>';
+        pleinSelect.disabled = true;
+
+    } catch (fout) {
+        console.error("Wedstrijd opslaan mislukt:", fout);
+
+        let bericht = "De wedstrijd kon niet worden opgeslagen.";
+
+        if (
+            fout.message &&
+            fout.message.includes("Dit speelplein is op dat tijdstip al gereserveerd")
+        ) {
+            bericht =
+                "Dit speelplein is op dat tijdstip al gereserveerd. Kies een ander plein of tijdstip.";
+        } else if (fout.message) {
+            bericht += " Details: " + fout.message;
+        }
+
+        toonWedstrijdMelding(bericht);
+
+    } finally {
+        knop.disabled = false;
+        knop.textContent = "Wedstrijd plannen";
+    }
+});
