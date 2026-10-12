@@ -109,6 +109,13 @@
     document.getElementById("adminButton").addEventListener("click", () => alert("De beveiligde beheerderslogin bouwen we in de volgende stap. Deze knop is voorlopig nog niet actief."));
   </script>
 
+<section id="locaties">
+    <h2>Onze speellocaties</h2>
+    <div id="locatie-lijst">
+        <p>Locaties laden...</p>
+    </div>
+</section>
+  
 <!-- Supabase JavaScript-bibliotheek -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -122,28 +129,38 @@
         SUPABASE_PUBLISHABLE_KEY
     );
 
-    // Eerste verbindingstest: de locaties ophalen.
-    async function testSupabaseConnection() {
-        const { data, error } = await supabaseClient
-            .from("venues")
-            .select("id, name")
-            .eq("is_active", true);
+// De locaties ophalen en weergeven op de website.
+async function laadLocaties() {
+    const { data, error } = await supabaseClient
+        .from("venues")
+        .select("id, name")
+        .eq("is_active", true)
+        .order("name");
 
-        if (error) {
-            alert(
-                "Verbinding met Supabase mislukt.\n\n" +
-                error.message
-            );
-            return;
-        }
+    const locatieLijst = document.getElementById("locatie-lijst");
 
-        alert(
-            "Verbinding met Supabase gelukt! 🎉\n\n" +
-            data.length + " locaties gevonden."
-        );
+    if (error) {
+        locatieLijst.innerHTML =
+            "<p>De locaties konden niet worden geladen.</p>";
+        console.error("Fout bij ophalen locaties:", error.message);
+        return;
     }
 
-    testSupabaseConnection();
+    if (data.length === 0) {
+        locatieLijst.innerHTML =
+            "<p>Er zijn nog geen locaties beschikbaar.</p>";
+        return;
+    }
+
+    locatieLijst.innerHTML = data.map(locatie => `
+        <div class="locatie-kaart">
+            <h3>${locatie.name}</h3>
+        </div>
+    `).join("");
+}
+
+laadLocaties();
+
 </script>
   
 </body>
