@@ -65,9 +65,7 @@ document.getElementById("adminButton").addEventListener("click", () => {
 
 // 3. Verbinding met Supabase
 const SUPABASE_URL = "https://uldmdrhrrniynbgecsby.supabase.co";
-
-// Vul hier je eigen Supabase publishable key in.
-const SUPABASE_PUBLISHABLE_KEY = "VUL_HIER_JE_PUBLISHABLE_KEY_IN";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_aHpSMc2mXDJRM-FBvJ1GDA_gMByWSNY";
 
 const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
