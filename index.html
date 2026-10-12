@@ -43,7 +43,80 @@
     </div>
     </section>
       <section id="standingsView" class="panel hidden"><h3>Klassement 2027</h3><p class="muted">Zodra teams en uitslagen zijn ingevoerd, verschijnt hier het actuele klassement.</p><div class="empty"><div class="empty-icon">📊</div><strong>Nog geen klassement</strong><p>Er zijn nog geen teams of resultaten geregistreerd.</p></div></section>
-      <section id="matchesView" class="panel hidden"><h3>Wedstrijdkalender</h3><p class="muted">Bevestigde wedstrijden komen hier te staan. Wedstrijden waarbij supporters welkom zijn, worden duidelijk aangeduid.</p><div class="empty"><div class="empty-icon">📅</div><strong>De kalender wordt voorbereid</strong><p>Wedstrijden verschijnen zodra teams zijn aangemaakt en afspraken bevestigd zijn.</p></div></section>
+
+<section id="matchesView" class="panel hidden">
+    <div class="heading" style="margin-top: 0;">
+        <h2>Wedstrijdkalender</h2>
+        <p>Plan een wedstrijd en reserveer meteen een beschikbaar speelplein.</p>
+    </div>
+
+    <div class="wedstrijd-formulier">
+        <h3>Wedstrijd plannen</h3>
+
+        <form id="wedstrijd-form">
+            <div class="formulier-grid">
+
+                <div class="form-veld">
+                    <label for="thuisploeg">Thuisploeg</label>
+                    <select id="thuisploeg" required>
+                        <option value="">Kies de thuisploeg</option>
+                    </select>
+                </div>
+
+                <div class="form-veld">
+                    <label for="uitploeg">Uitploeg</label>
+                    <select id="uitploeg" required>
+                        <option value="">Kies de uitploeg</option>
+                    </select>
+                </div>
+
+                <div class="form-veld">
+                    <label for="wedstrijd-datum">Datum</label>
+                    <input type="date" id="wedstrijd-datum" required>
+                </div>
+
+                <div class="form-veld">
+                    <label for="wedstrijd-uur">Startuur</label>
+                    <input type="time" id="wedstrijd-uur" required>
+                </div>
+
+                <div class="form-veld">
+                    <label for="wedstrijd-locatie">Speellocatie</label>
+                    <select id="wedstrijd-locatie" required>
+                        <option value="">Kies een locatie</option>
+                    </select>
+                </div>
+
+                <div class="form-veld">
+                    <label for="wedstrijd-plein">Speelplein</label>
+                    <select id="wedstrijd-plein" required disabled>
+                        <option value="">Kies eerst een locatie</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <p class="formulier-info">
+                Een wedstrijd duurt standaard 90 minuten.
+                Het gekozen speelplein moet tijdens die periode beschikbaar zijn.
+            </p>
+
+            <div id="wedstrijd-melding" class="wedstrijd-melding hidden"></div>
+
+            <button type="submit" class="btn primary" id="wedstrijd-opslaan">
+                Wedstrijd plannen
+            </button>
+        </form>
+    </div>
+
+    <div class="heading">
+        <h2>Geplande wedstrijden</h2>
+    </div>
+
+    <div id="wedstrijd-lijst">
+        <p class="muted">De geplande wedstrijden verschijnen hier.</p>
+    </div>
+</section>
       <section id="teamsView" class="panel hidden"><h3>De teams</h3><p class="muted">Alle goedgekeurde teams van LOL à boules 2027 komen hier samen.</p><div class="empty"><div class="empty-icon">👥</div><strong>Welke teams doen mee?</strong><p>De teamlijst wordt zichtbaar zodra de inschrijvingen zijn ingevoerd en goedgekeurd.</p></div></section>
     </main>
     <footer><span>LOL à boules 2027</span><span>Van straat tot plein, samen moet het LOL zijn!</span></footer>
