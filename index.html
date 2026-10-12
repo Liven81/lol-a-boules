@@ -122,7 +122,45 @@
     <footer><span>LOL à boules 2027</span><span>Van straat tot plein, samen moet het LOL zijn!</span></footer>
   </div>
 
+<!-- Beheerderslogin -->
+<div id="login-venster" class="login-overlay hidden">
+    <div class="login-kaart">
+        <button type="button" id="login-sluiten" class="login-sluiten"
+                aria-label="Venster sluiten">&times;</button>
 
+        <h2>Beheer LOL à boules</h2>
+        <p>Log in om de competitie te beheren.</p>
+
+        <form id="login-formulier">
+            <div class="form-veld">
+                <label for="login-email">E-mailadres</label>
+                <input
+                    type="email"
+                    id="login-email"
+                    autocomplete="username"
+                    required
+                >
+            </div>
+
+            <div class="form-veld">
+                <label for="login-wachtwoord">Wachtwoord</label>
+                <input
+                    type="password"
+                    id="login-wachtwoord"
+                    autocomplete="current-password"
+                    required
+                >
+            </div>
+
+            <p id="login-melding" class="wedstrijd-melding hidden"></p>
+
+            <button type="submit" id="login-knop" class="btn primary">
+                Inloggen
+            </button>
+        </form>
+    </div>
+</div>
+  
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="app.js"></script>
   
