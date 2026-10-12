@@ -17,6 +17,10 @@ const views = {
         "Wedstrijdkalender",
         "Bekijk de geplande en bevestigde wedstrijden."
     ],
+    locaties: [
+        "Onze speellocaties",
+        "Ontdek onze pleinen en ontmoetingsplaatsen."
+    ],
     teams: [
         "De teams",
         "Leer de deelnemende teams kennen."
