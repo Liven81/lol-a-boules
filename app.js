@@ -83,7 +83,6 @@ async function laadLocaties() {
 
     locatieLijst.innerHTML = "<p>Locaties laden...</p>";
 
-    // Locaties ophalen
     const { data: locaties, error: locatieFout } = await supabaseClient
         .from("venues")
         .select("id, name")
@@ -104,12 +103,10 @@ async function laadLocaties() {
         return;
     }
 
-    // Speelpleinen ophalen
     const { data: pleinen, error: pleinFout } = await supabaseClient
         .from("courts")
-        .select("id, venue_id, name")
-        .eq("is_active", true)
-        .order("name");
+        .select("id, venue_id")
+        .eq("is_active", true);
 
     if (pleinFout) {
         locatieLijst.innerHTML =
@@ -119,36 +116,19 @@ async function laadLocaties() {
         return;
     }
 
-    // Locaties en hun speelpleinen weergeven
     locatieLijst.innerHTML = locaties.map(locatie => {
-        const locatiePleinen = (pleinen || []).filter(
+        const aantal = (pleinen || []).filter(
             plein => plein.venue_id === locatie.id
-        );
+        ).length;
 
-        const aantal = locatiePleinen.length;
-        const pleinTekst = aantal === 1
-            ? "speelplein"
-            : "speelpleinen";
+        const tekst = aantal === 1 ? "speelplein" : "speelpleinen";
 
         return `
             <div class="locatie-kaart">
                 <h3>${locatie.name}</h3>
-
                 <p class="locatie-aantal">
-                    <strong>${aantal}</strong> ${pleinTekst}
+                    <strong>${aantal}</strong> ${tekst}
                 </p>
-
-                ${
-                    aantal > 0
-                        ? `
-                            <ul class="plein-lijst">
-                                ${locatiePleinen.map(plein => `
-                                    <li>${plein.name}</li>
-                                `).join("")}
-                            </ul>
-                        `
-                        : "<p class=\"geen-pleinen\">Nog geen speelpleinen.</p>"
-                }
             </div>
         `;
     }).join("");
