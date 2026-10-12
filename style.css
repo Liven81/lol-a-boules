@@ -398,7 +398,7 @@ nav button.active {
    Speellocaties
    ======================================== */
 
-#locaties {
+#locatiesView {
     grid-column: 1 / -1;
     width: 100%;
     min-width: 0;
@@ -407,15 +407,15 @@ nav button.active {
 
 /* Titel en ondertitel gebruiken de algemene heading-stijl */
 
-#locaties .heading {
+#locatiesView .heading {
     margin: 0 0 20px;
 }
 
-#locaties .heading h2 {
+#locatiesView .heading h2 {
     margin: 0;
 }
 
-#locaties .heading p {
+#locatiesView .heading p {
     margin: 5px 0 0;
 }
 
