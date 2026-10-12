@@ -81,36 +81,77 @@ async function laadLocaties() {
         return;
     }
 
-    const { data, error } = await supabaseClient
+    locatieLijst.innerHTML = "<p>Locaties laden...</p>";
+
+    // Locaties ophalen
+    const { data: locaties, error: locatieFout } = await supabaseClient
         .from("venues")
         .select("id, name")
         .eq("is_active", true)
         .order("name");
 
-    if (error) {
+    if (locatieFout) {
         locatieLijst.innerHTML =
             "<p>De locaties konden niet worden geladen.</p>";
 
-        console.error(
-            "Fout bij ophalen locaties:",
-            error.message
-        );
-
+        console.error("Fout bij ophalen locaties:", locatieFout.message);
         return;
     }
 
-    if (!data || data.length === 0) {
+    if (!locaties || locaties.length === 0) {
         locatieLijst.innerHTML =
             "<p>Er zijn nog geen locaties beschikbaar.</p>";
-
         return;
     }
 
-    locatieLijst.innerHTML = data.map(locatie => `
-        <div class="locatie-kaart">
-            <h3>${locatie.name}</h3>
-        </div>
-    `).join("");
+    // Speelpleinen ophalen
+    const { data: pleinen, error: pleinFout } = await supabaseClient
+        .from("courts")
+        .select("id, venue_id, name")
+        .eq("is_active", true)
+        .order("name");
+
+    if (pleinFout) {
+        locatieLijst.innerHTML =
+            "<p>De speelpleinen konden niet worden geladen.</p>";
+
+        console.error("Fout bij ophalen speelpleinen:", pleinFout.message);
+        return;
+    }
+
+    // Locaties en hun speelpleinen weergeven
+    locatieLijst.innerHTML = locaties.map(locatie => {
+        const locatiePleinen = (pleinen || []).filter(
+            plein => plein.venue_id === locatie.id
+        );
+
+        const aantal = locatiePleinen.length;
+        const pleinTekst = aantal === 1
+            ? "speelplein"
+            : "speelpleinen";
+
+        return `
+            <div class="locatie-kaart">
+                <h3>${locatie.name}</h3>
+
+                <p class="locatie-aantal">
+                    <strong>${aantal}</strong> ${pleinTekst}
+                </p>
+
+                ${
+                    aantal > 0
+                        ? `
+                            <ul class="plein-lijst">
+                                ${locatiePleinen.map(plein => `
+                                    <li>${plein.name}</li>
+                                `).join("")}
+                            </ul>
+                        `
+                        : "<p class=\"geen-pleinen\">Nog geen speelpleinen.</p>"
+                }
+            </div>
+        `;
+    }).join("");
 }
 
 laadLocaties();
