@@ -56,10 +56,30 @@ document.querySelectorAll("[data-view]").forEach(button => {
 
 
 // 2. Beheerdersknop
-document.getElementById("adminButton").addEventListener("click", () => {
-    alert(
-        "De beveiligde beheerderslogin bouwen we in een volgende stap."
-    );
+document.getElementById("adminButton").addEventListener("click", async () => {
+    const { data } = await supabaseClient.auth.getSession();
+
+    if (data.session) {
+        const bevestigen = confirm(
+            "Je bent ingelogd. Wil je uitloggen?"
+        );
+
+        if (bevestigen) {
+            const { error } = await supabaseClient.auth.signOut();
+
+            if (error) {
+                alert("Uitloggen is mislukt.");
+                console.error(error);
+            } else {
+                alert("Je bent uitgelogd.");
+            }
+        }
+
+        return;
+    }
+
+    document.getElementById("login-venster").classList.remove("hidden");
+    document.getElementById("login-email").focus();
 });
 
 
@@ -393,5 +413,74 @@ document.getElementById("wedstrijd-form")?.addEventListener("submit", async func
     } finally {
         knop.disabled = false;
         knop.textContent = "Wedstrijd plannen";
+    }
+});
+
+// ========================================
+// Beheerderslogin via Supabase
+// ========================================
+
+const loginVenster = document.getElementById("login-venster");
+const loginFormulier = document.getElementById("login-formulier");
+const loginMelding = document.getElementById("login-melding");
+const loginKnop = document.getElementById("login-knop");
+
+// Loginvenster sluiten
+document.getElementById("login-sluiten").addEventListener("click", () => {
+    loginVenster.classList.add("hidden");
+    loginMelding.textContent = "";
+    loginMelding.classList.add("hidden");
+});
+
+// Ook sluiten door buiten het venster te klikken
+loginVenster.addEventListener("click", (event) => {
+    if (event.target === loginVenster) {
+        loginVenster.classList.add("hidden");
+    }
+});
+
+// Inloggen
+loginFormulier.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById("login-email").value.trim();
+    const wachtwoord = document.getElementById("login-wachtwoord").value;
+
+    loginKnop.disabled = true;
+    loginKnop.textContent = "Even wachten...";
+
+    loginMelding.classList.add("hidden");
+    loginMelding.textContent = "";
+
+    try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: wachtwoord
+        });
+
+        if (error) {
+            throw error;
+        }
+
+        if (!data.session) {
+            throw new Error("Er kon geen actieve sessie worden gestart.");
+        }
+
+        loginVenster.classList.add("hidden");
+        loginFormulier.reset();
+
+        alert("Je bent succesvol ingelogd!");
+
+    } catch (error) {
+        console.error("Inloggen mislukt:", error);
+
+        loginMelding.textContent =
+            "Inloggen mislukt. Controleer je e-mailadres en wachtwoord.";
+
+        loginMelding.classList.remove("hidden");
+
+    } finally {
+        loginKnop.disabled = false;
+        loginKnop.textContent = "Inloggen";
     }
 });
