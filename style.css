@@ -102,3 +102,11 @@
     @media (max-width: 740px) { .grid { grid-template-columns: 1fr; } .hero { border-radius: 21px; } .hero:after { width: 145px; height: 145px; right: -75px; top: -65px; border-width: 17px; } nav button { padding: 9px 10px; font-size: .86rem; } }
     @media (max-width: 420px) { .brand-sub { max-width: 185px; font-size: .7rem; } .admin { padding: 9px 11px; } }
 
+/* Speellocaties op de startpagina */
+#locaties {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+    margin: 0;
+}
