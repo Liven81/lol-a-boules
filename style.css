@@ -1,112 +1,534 @@
-/* Algemene vormgeving van de website */
-#locaties {
-    max-width: 1000px;
-    margin: 40px auto;
-    padding: 24px;
-    font-family: Arial, sans-serif;
+/* ========================================
+   LOL à boules 2027
+   Algemene huisstijl
+   ======================================== */
+
+:root {
+    --green: #2e7d55;
+    --yellow: #f2c94c;
+    --blue: #3978c5;
+    --red: #e45a4f;
+
+    --ink: #202923;
+    --muted: #68736b;
+    --paper: #f7f7f2;
+    --card: #ffffff;
+    --line: #e2e7df;
 }
 
-#locaties h2 {
-    font-size: 28px;
-    margin-bottom: 24px;
-    color: #222;
+/* ========================================
+   Basis
+   ======================================== */
+
+* {
+    box-sizing: border-box;
 }
 
-/* Overzicht van de speellocaties */
-#locatie-lijst {
+body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button {
+    font: inherit;
+}
+
+button:focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 3px;
+}
+
+.wrap {
+    width: min(1080px, calc(100% - 36px));
+    margin: 0 auto;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ========================================
+   Kleurenbalk bovenaan
+   ======================================== */
+
+.topline {
+    height: 7px;
+    background: linear-gradient(
+        90deg,
+        var(--green) 0 25%,
+        var(--yellow) 25% 50%,
+        var(--blue) 50% 75%,
+        var(--red) 75% 100%
+    );
+}
+
+/* ========================================
+   Header en logo
+   ======================================== */
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 0;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.mark {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    border-radius: 14px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    padding: 7px;
+    background: white;
+    border: 1px solid var(--line);
+}
+
+.mark span {
+    border-radius: 50%;
+}
+
+.mark span:nth-child(1) {
+    background: var(--green);
+}
+
+.mark span:nth-child(2) {
+    background: var(--yellow);
+}
+
+.mark span:nth-child(3) {
+    background: var(--blue);
+}
+
+.mark span:nth-child(4) {
+    background: var(--red);
+}
+
+.brand-name {
+    font-size: 1.2rem;
+    font-weight: 900;
+    letter-spacing: -.04em;
+}
+
+.brand-sub {
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: .78rem;
+}
+
+.admin {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 10px 15px;
+    background: white;
+    color: var(--ink);
+    font-weight: 750;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* ========================================
+   Introductie / hero
+   ======================================== */
+
+.hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 26px;
+    padding: clamp(28px, 6vw, 62px);
+    margin: 18px 0 28px;
+    box-shadow: 0 16px 45px rgba(28, 48, 34, .06);
+}
+
+.hero:after {
+    content: "";
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    right: -70px;
+    top: -70px;
+    border: 25px solid rgba(242, 201, 76, .20);
+    box-shadow:
+        0 0 0 23px rgba(57, 120, 197, .07),
+        0 0 0 49px rgba(46, 125, 85, .06);
+    pointer-events: none;
+}
+
+.eyebrow {
+    display: inline-block;
+    border-radius: 999px;
+    background: #edf5ee;
+    color: var(--green);
+    padding: 7px 11px;
+    font-size: .73rem;
+    font-weight: 850;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+h1 {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    margin: 20px 0 16px;
+    font-size: clamp(2.5rem, 7vw, 4.8rem);
+    line-height: .98;
+    letter-spacing: -.065em;
+}
+
+h1 span {
+    color: var(--green);
+}
+
+.hero p {
+    max-width: 570px;
+    color: var(--muted);
+    font-size: 1.08rem;
+    line-height: 1.65;
+    margin: 0;
+}
+
+/* ========================================
+   Knoppen
+   ======================================== */
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 26px;
+}
+
+.btn {
+    border: 0;
+    border-radius: 12px;
+    padding: 13px 17px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.primary {
+    background: var(--green);
+    color: white;
+}
+
+.secondary {
+    background: #f0f3ed;
+    color: var(--ink);
+}
+
+/* ========================================
+   Sectietitels en ondertitels
+   ======================================== */
+
+.heading {
+    margin: 34px 0 15px;
+}
+
+h2 {
+    margin: 0;
+    font-size: 1.45rem;
+    letter-spacing: -.035em;
+}
+
+.heading p {
+    margin: 5px 0 0;
+    color: var(--muted);
+    font-size: .93rem;
+}
+
+/* ========================================
+   Navigatie
+   ======================================== */
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 6px;
+    border: 1px solid var(--line);
+    background: white;
+    border-radius: 15px;
+    margin-bottom: 18px;
+}
+
+nav button {
+    border: 0;
+    background: transparent;
+    padding: 10px 13px;
+    border-radius: 10px;
+    color: var(--muted);
+    font-weight: 750;
+    cursor: pointer;
+}
+
+nav button.active {
+    background: #eaf3ec;
+    color: var(--green);
+}
+
+/* ========================================
+   Panelen en overzicht
+   ======================================== */
+
+.grid {
+    display: grid;
+    grid-template-columns: 1.2fr .8fr;
     gap: 18px;
 }
 
-/* Kaartje per locatie */
-.locatie-kaart {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-left: 6px solid #198754;
-    border-radius: 12px;
+.panel {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 19px;
     padding: 22px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    min-width: 0;
 }
 
-.locatie-kaart:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.10);
+.panel h3 {
+    margin: 0 0 6px;
+    font-size: 1.05rem;
+}
+
+.muted {
+    color: var(--muted);
+    font-size: .9rem;
+    line-height: 1.5;
+}
+
+/* ========================================
+   Lege toestanden
+   ======================================== */
+
+.empty {
+    margin-top: 18px;
+    border: 1px dashed #cbd5ca;
+    background: #fafbf8;
+    border-radius: 14px;
+    padding: 25px 18px;
+    text-align: center;
+}
+
+.empty-icon {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+}
+
+.empty strong {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.empty p {
+    max-width: 370px;
+    margin: 0 auto;
+    color: var(--muted);
+    font-size: .9rem;
+    line-height: 1.5;
+}
+
+/* ========================================
+   Statistieken
+   ======================================== */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9px;
+    margin-top: 16px;
+}
+
+.stat {
+    background: #f5f7f2;
+    border-radius: 13px;
+    padding: 13px;
+}
+
+.stat b {
+    display: block;
+    font-size: 1.5rem;
+    letter-spacing: -.05em;
+}
+
+.stat span {
+    display: block;
+    color: var(--muted);
+    font-size: .76rem;
+    margin-top: 3px;
+}
+
+.dots {
+    display: flex;
+    gap: 7px;
+    margin-top: 16px;
+}
+
+.dots span {
+    height: 7px;
+    border-radius: 999px;
+    flex: 1;
+}
+
+.notice {
+    margin-top: 17px;
+    padding: 14px;
+    border-radius: 12px;
+    background: #fff7db;
+    color: #65531c;
+    font-size: .86rem;
+    line-height: 1.5;
+}
+
+/* ========================================
+   Speellocaties
+   ======================================== */
+
+#locaties {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+}
+
+/* Titel en ondertitel gebruiken de algemene heading-stijl */
+
+#locaties .heading {
+    margin: 0 0 20px;
+}
+
+#locaties .heading h2 {
+    margin: 0;
+}
+
+#locaties .heading p {
+    margin: 5px 0 0;
+}
+
+/* Raster met locatiekaartjes */
+
+#locatie-lijst {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+    gap: 14px;
+}
+
+/* Individueel locatiekaartje */
+
+.locatie-kaart {
+    background: #fafbf8;
+    border: 1px solid var(--line);
+    border-left: 5px solid var(--green);
+    border-radius: 13px;
+    padding: 18px;
+    min-width: 0;
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
 }
 
 .locatie-kaart h3 {
     margin: 0;
-    font-size: 19px;
-    color: #222;
+    color: var(--ink);
+    font-size: 1rem;
+    font-weight: 800;
 }
 
-/* Aanpassing voor smartphones */
+@media (hover: hover) and (pointer: fine) {
+    .locatie-kaart:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 14px rgba(28, 48, 34, .08);
+    }
+}
+
+/* ========================================
+   Footer
+   ======================================== */
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 28px 0 34px;
+    color: var(--muted);
+    font-size: .82rem;
+}
+
+/* ========================================
+   Tablet en smartphone
+   ======================================== */
+
+@media (max-width: 740px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero {
+        border-radius: 21px;
+    }
+
+    .hero:after {
+        width: 145px;
+        height: 145px;
+        right: -75px;
+        top: -65px;
+        border-width: 17px;
+    }
+
+    nav button {
+        padding: 9px 10px;
+        font-size: .86rem;
+    }
+}
+
 @media (max-width: 600px) {
-    #locaties {
-        padding: 16px;
+    .wrap {
+        width: calc(100% - 24px);
     }
 
-    #locaties h2 {
-        font-size: 24px;
+    #locatie-lijst {
+        grid-template-columns: 1fr;
+    }
+
+    .panel {
+        padding: 18px;
+    }
+
+    #locaties.panel {
+        padding: 18px;
     }
 }
 
-    :root {
-      --green: #2e7d55;
-      --yellow: #f2c94c;
-      --blue: #3978c5;
-      --red: #e45a4f;
-      --ink: #202923;
-      --muted: #68736b;
-      --paper: #f7f7f2;
-      --card: #ffffff;
-      --line: #e2e7df;
+@media (max-width: 420px) {
+    .brand-sub {
+        max-width: 185px;
+        font-size: .7rem;
     }
-    * { box-sizing: border-box; }
-    body { margin: 0; background: var(--paper); color: var(--ink); font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-    .topline { height: 7px; background: linear-gradient(90deg, var(--green) 0 25%, var(--yellow) 25% 50%, var(--blue) 50% 75%, var(--red) 75% 100%); }
-    .wrap { width: min(1080px, calc(100% - 36px)); margin: 0 auto; }
-    header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; }
-    .brand { display: flex; align-items: center; gap: 12px; }
-    .mark { width: 46px; height: 46px; border-radius: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 7px; background: white; border: 1px solid var(--line); }
-    .mark span { border-radius: 50%; }
-    .mark span:nth-child(1) { background: var(--green); } .mark span:nth-child(2) { background: var(--yellow); } .mark span:nth-child(3) { background: var(--blue); } .mark span:nth-child(4) { background: var(--red); }
-    .brand-name { font-size: 1.2rem; font-weight: 900; letter-spacing: -.04em; }
-    .brand-sub { margin-top: 2px; color: var(--muted); font-size: .78rem; }
-    .admin { border: 1px solid var(--line); border-radius: 999px; padding: 10px 15px; background: white; color: var(--ink); font-weight: 750; cursor: pointer; }
-    .hero { position: relative; overflow: hidden; background: var(--card); border: 1px solid var(--line); border-radius: 26px; padding: clamp(28px, 6vw, 62px); margin: 18px 0 28px; box-shadow: 0 16px 45px rgba(28,48,34,.06); }
-    .hero:after { content: ""; position: absolute; width: 220px; height: 220px; border-radius: 50%; right: -70px; top: -70px; border: 25px solid rgba(242,201,76,.20); box-shadow: 0 0 0 23px rgba(57,120,197,.07), 0 0 0 49px rgba(46,125,85,.06); pointer-events: none; }
-    .eyebrow { display: inline-block; border-radius: 999px; background: #edf5ee; color: var(--green); padding: 7px 11px; font-size: .73rem; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
-    h1 { position: relative; z-index: 1; max-width: 680px; margin: 20px 0 16px; font-size: clamp(2.5rem, 7vw, 4.8rem); line-height: .98; letter-spacing: -.065em; }
-    h1 span { color: var(--green); }
-    .hero p { max-width: 570px; color: var(--muted); font-size: 1.08rem; line-height: 1.65; margin: 0; }
-    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
-    .btn { border: 0; border-radius: 12px; padding: 13px 17px; font-weight: 800; cursor: pointer; }
-    .primary { background: var(--green); color: white; } .secondary { background: #f0f3ed; color: var(--ink); }
-    .heading { margin: 34px 0 15px; } h2 { margin: 0; font-size: 1.45rem; letter-spacing: -.035em; } .heading p { margin: 5px 0 0; color: var(--muted); font-size: .93rem; }
-    nav { display: flex; flex-wrap: wrap; gap: 5px; padding: 6px; border: 1px solid var(--line); background: white; border-radius: 15px; margin-bottom: 18px; }
-    nav button { border: 0; background: transparent; padding: 10px 13px; border-radius: 10px; color: var(--muted); font-weight: 750; cursor: pointer; }
-    nav button.active { background: #eaf3ec; color: var(--green); }
-    .grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px; }
-    .panel { background: white; border: 1px solid var(--line); border-radius: 19px; padding: 22px; min-width: 0; }
-    .panel h3 { margin: 0 0 6px; font-size: 1.05rem; } .muted { color: var(--muted); font-size: .9rem; line-height: 1.5; }
-    .empty { margin-top: 18px; border: 1px dashed #cbd5ca; background: #fafbf8; border-radius: 14px; padding: 25px 18px; text-align: center; }
-    .empty-icon { font-size: 1.8rem; margin-bottom: 8px; } .empty strong { display: block; margin-bottom: 6px; } .empty p { max-width: 370px; margin: 0 auto; color: var(--muted); font-size: .9rem; line-height: 1.5; }
-    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 16px; } .stat { background: #f5f7f2; border-radius: 13px; padding: 13px; } .stat b { display: block; font-size: 1.5rem; letter-spacing: -.05em; } .stat span { display: block; color: var(--muted); font-size: .76rem; margin-top: 3px; }
-    .dots { display: flex; gap: 7px; margin-top: 16px; } .dots span { height: 7px; border-radius: 999px; flex: 1; }
-    .notice { margin-top: 17px; padding: 14px; border-radius: 12px; background: #fff7db; color: #65531c; font-size: .86rem; line-height: 1.5; }
-    .hidden { display: none; }
-    footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding: 28px 0 34px; color: var(--muted); font-size: .82rem; }
-    button:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
-    @media (max-width: 740px) { .grid { grid-template-columns: 1fr; } .hero { border-radius: 21px; } .hero:after { width: 145px; height: 145px; right: -75px; top: -65px; border-width: 17px; } nav button { padding: 9px 10px; font-size: .86rem; } }
-    @media (max-width: 420px) { .brand-sub { max-width: 185px; font-size: .7rem; } .admin { padding: 9px 11px; } }
 
-/* Speellocaties op de startpagina */
-#locaties {
-    grid-column: 1 / -1;
-    width: 100%;
-    max-width: none;
-    box-sizing: border-box;
-    margin: 0;
+    .admin {
+        padding: 9px 11px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .stat {
+        padding: 12px;
+    }
 }
