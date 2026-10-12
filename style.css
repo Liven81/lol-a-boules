@@ -532,3 +532,40 @@ footer {
         padding: 12px;
     }
 }
+
+/* Informatie over speelpleinen */
+.locatie-aantal {
+    margin: 12px 0 10px;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.locatie-aantal strong {
+    color: var(--green);
+    font-size: 1.15rem;
+}
+
+.plein-lijst {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.plein-lijst li {
+    background: #edf5ee;
+    color: var(--green);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.geen-pleinen {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 0;
+}
+
