@@ -1,0 +1,53 @@
+/* Algemene vormgeving van de website */
+#locaties {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 24px;
+    font-family: Arial, sans-serif;
+}
+
+#locaties h2 {
+    font-size: 28px;
+    margin-bottom: 24px;
+    color: #222;
+}
+
+/* Overzicht van de speellocaties */
+#locatie-lijst {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+}
+
+/* Kaartje per locatie */
+.locatie-kaart {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-left: 6px solid #198754;
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.locatie-kaart:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.10);
+}
+
+.locatie-kaart h3 {
+    margin: 0;
+    font-size: 19px;
+    color: #222;
+}
+
+/* Aanpassing voor smartphones */
+@media (max-width: 600px) {
+    #locaties {
+        padding: 16px;
+    }
+
+    #locaties h2 {
+        font-size: 24px;
+    }
+}
