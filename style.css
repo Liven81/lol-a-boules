@@ -569,3 +569,84 @@ footer {
     margin-bottom: 0;
 }
 
+/* Wedstrijdplanning */
+.wedstrijd-formulier {
+    margin-top: 20px;
+    padding: 22px;
+    background: #fafbf8;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+}
+
+.wedstrijd-formulier > h3 {
+    margin: 0 0 20px;
+}
+
+.formulier-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.form-veld {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+.form-veld label {
+    font-size: 0.9rem;
+    font-weight: 750;
+}
+
+.form-veld input,
+.form-veld select {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: white;
+    color: var(--ink);
+    font: inherit;
+}
+
+.form-veld input:focus,
+.form-veld select:focus {
+    outline: 2px solid var(--green);
+    outline-offset: 1px;
+}
+
+.form-veld select:disabled {
+    background: #f0f1ed;
+    color: var(--muted);
+    cursor: not-allowed;
+}
+
+.formulier-info {
+    margin: 20px 0;
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.5;
+}
+
+.wedstrijd-melding {
+    margin: 15px 0;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #fff7db;
+    color: #65531c;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+    .formulier-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .wedstrijd-formulier {
+        padding: 16px;
+    }
+}
