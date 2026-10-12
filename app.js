@@ -28,35 +28,36 @@ const views = {
 };
 
 function showView(view) {
-    const selected = Object.hasOwn(views, view) ? view : "overview";
+const selected = Object.hasOwn(views, view) ? view : "overview";
 
-    Object.keys(views).forEach(name => {
-        const section = document.getElementById(name + "View");
+Object.keys(views).forEach(name => {
+    const section = document.getElementById(name + "View");
 
-        if (section) {
-            section.classList.toggle("hidden", name !== selected);
-        }
-    });
+    if (section) {
+        section.classList.toggle("hidden", name !== selected);
+    }
+});
 
-    document.querySelectorAll("nav [data-view]").forEach(button => {
-        button.classList.toggle(
-            "active",
-            button.dataset.view === selected
-        );
-    });
+document.querySelectorAll("nav [data-view]").forEach(button => {
+    button.classList.toggle(
+        "active",
+        button.dataset.view === selected
+    );
+});
 
-    document.getElementById("sectionTitle").textContent =
-        views[selected][0];
+const sectionTitle = document.getElementById("sectionTitle");
+const sectionSubtitle = document.getElementById("sectionSubtitle");
 
-    document.getElementById("sectionSubtitle").textContent =
-        views[selected][1];
+if (sectionTitle) {
+    sectionTitle.textContent = views[selected][0];
 }
 
-document.querySelectorAll("[data-view]").forEach(button => {
-    button.addEventListener("click", () => {
-        showView(button.dataset.view);
-    });
-});
+if (sectionSubtitle) {
+    sectionSubtitle.textContent = views[selected][1];
+}
+
+}
+
 
 // 2. Verbinding met Supabase
 const SUPABASE_URL = "https://uldmdrhrrniynbgecsby.supabase.co";
