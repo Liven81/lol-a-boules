@@ -650,3 +650,57 @@ footer {
         padding: 16px;
     }
 }
+
+/* Beheerderslogin */
+.login-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(20, 30, 25, 0.65);
+}
+
+.login-overlay.hidden {
+    display: none;
+}
+
+.login-kaart {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    padding: 28px;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.login-kaart h2 {
+    margin: 0 35px 8px 0;
+}
+
+.login-kaart > p {
+    margin-bottom: 24px;
+    color: var(--muted);
+}
+
+.login-kaart .form-veld {
+    margin-bottom: 18px;
+}
+
+.login-kaart #login-knop {
+    width: 100%;
+}
+
+.login-sluiten {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    border: 0;
+    background: transparent;
+    font-size: 30px;
+    cursor: pointer;
+    color: var(--muted);
+}
