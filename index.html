@@ -26,13 +26,17 @@
       </section>
       <div class="heading"><h2 id="sectionTitle">De competitie</h2></div>
       <nav aria-label="Hoofdnavigatie">
-        <button class="active" data-view="overview" type="button">Overzicht</button><button data-view="standings" type="button">Klassement</button><button data-view="matches" type="button">Wedstrijdkalender</button><button data-view="teams" type="button">Teams</button>
+        <button class="active" data-view="overview" type="button">Overzicht</button>
+        <button data-view="standings" type="button">Klassement</button>
+        <button data-view="matches" type="button">Wedstrijdkalender</button>
+        <button data-view="locaties">Locaties</button>
+        <button data-view="teams" type="button">Teams</button>
       </nav>
       <section id="overviewView" class="grid">
         <div class="panel"><h3>Het klassement</h3><p class="muted">Wie pakt de eerste overwinning? Het klassement verschijnt zodra de competitiegegevens beschikbaar zijn.</p><div class="empty"><div class="empty-icon">🏆</div><strong>De strijd moet nog beginnen</strong><p>De eerste editie wordt voorbereid. Binnenkort vind je hier de teams, resultaten en tussenstand.</p></div></div>
         <div class="panel"><h3>In één oogopslag</h3><p class="muted">De spelregels van deze eerste editie.</p><div class="stats"><div class="stat"><b>13</b><span>punten om te winnen</span></div><div class="stat"><b>1</b><span>competitiepunt per zege</span></div><div class="stat"><b>10</b><span>speelpleinen</span></div></div><div class="dots" aria-label="Vier clubkleuren"><span style="background:var(--green)"></span><span style="background:var(--yellow)"></span><span style="background:var(--blue)"></span><span style="background:var(--red)"></span></div><div class="notice">📅 De competitie start in het voorjaar van 2027. De zomerplanning houdt rekening met vakanties.</div></div>
       </section>
-    <section id="locaties" class="panel">
+ <section id="locatiesView" class="panel hidden">
     <div class="heading">
         <h2>Onze speellocaties</h2>
         <p>Ontdek waar je een balletje kunt gooien.</p>
@@ -41,7 +45,7 @@
     <div id="locatie-lijst">
         <p>Locaties laden...</p>
     </div>
-    </section>
+</section>
       <section id="standingsView" class="panel hidden"><h3>Klassement 2027</h3><p class="muted">Zodra teams en uitslagen zijn ingevoerd, verschijnt hier het actuele klassement.</p><div class="empty"><div class="empty-icon">📊</div><strong>Nog geen klassement</strong><p>Er zijn nog geen teams of resultaten geregistreerd.</p></div></section>
 
 <section id="matchesView" class="panel hidden">
