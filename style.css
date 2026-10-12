@@ -704,3 +704,9 @@ footer {
     cursor: pointer;
     color: var(--muted);
 }
+
+/* Voorkom horizontaal verspringen bij het wisselen van pagina */
+html {
+    overflow-y: scroll;
+}
+
