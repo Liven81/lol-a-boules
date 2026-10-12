@@ -38,80 +38,15 @@
     </main>
     <footer><span>LOL à boules 2027</span><span>Van straat tot plein, samen moet het LOL zijn!</span></footer>
   </div>
-  <script>
-    const views = {
-      overview: ["De competitie", "Alles voor LOL à boules 2027 op één plek."],
-      standings: ["Het klassement", "Volg de strijd om de eerste plaats."],
-      matches: ["Wedstrijdkalender", "Bekijk de geplande en bevestigde wedstrijden."],
-      teams: ["De teams", "Leer de deelnemende teams kennen."]
-    };
-    function showView(view) {
-      const selected = Object.hasOwn(views, view) ? view : "overview";
-      Object.keys(views).forEach(name => {
-        const section = document.getElementById(name + "View");
-        if (section) section.classList.toggle("hidden", name !== selected);
-      });
-      document.querySelectorAll("nav [data-view]").forEach(button => button.classList.toggle("active", button.dataset.view === selected));
-      document.getElementById("sectionTitle").textContent = views[selected][0];
-      document.getElementById("sectionSubtitle").textContent = views[selected][1];
-    }
-    document.querySelectorAll("[data-view]").forEach(button => button.addEventListener("click", () => showView(button.dataset.view)));
-    document.getElementById("adminButton").addEventListener("click", () => alert("De beveiligde beheerderslogin bouwen we in de volgende stap. Deze knop is voorlopig nog niet actief."));
-  </script>
-
 <section id="locaties">
     <h2>Onze speellocaties</h2>
     <div id="locatie-lijst">
         <p>Locaties laden...</p>
     </div>
 </section>
-  
-<!-- Supabase JavaScript-bibliotheek -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-    // Vul hier de gegevens van jouw eigen Supabase-project in.
-    const SUPABASE_URL = "https://uldmdrhrrniynbgecsby.supabase.co";
-    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_aHpSMc2mXDJRM-FBvJ1GDA_gMByWSNY";
-
-    const supabaseClient = window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-    );
-
-// De locaties ophalen en weergeven op de website.
-async function laadLocaties() {
-    const { data, error } = await supabaseClient
-        .from("venues")
-        .select("id, name")
-        .eq("is_active", true)
-        .order("name");
-
-    const locatieLijst = document.getElementById("locatie-lijst");
-
-    if (error) {
-        locatieLijst.innerHTML =
-            "<p>De locaties konden niet worden geladen.</p>";
-        console.error("Fout bij ophalen locaties:", error.message);
-        return;
-    }
-
-    if (data.length === 0) {
-        locatieLijst.innerHTML =
-            "<p>Er zijn nog geen locaties beschikbaar.</p>";
-        return;
-    }
-
-    locatieLijst.innerHTML = data.map(locatie => `
-        <div class="locatie-kaart">
-            <h3>${locatie.name}</h3>
-        </div>
-    `).join("");
-}
-
-laadLocaties();
-
-</script>
+<script src="app.js"></script>
   
 </body>
 </html>
