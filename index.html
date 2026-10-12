@@ -108,5 +108,46 @@
     document.querySelectorAll("[data-view]").forEach(button => button.addEventListener("click", () => showView(button.dataset.view)));
     document.getElementById("adminButton").addEventListener("click", () => alert("De beveiligde beheerderslogin bouwen we in de volgende stap. Deze knop is voorlopig nog niet actief."));
   </script>
+
+```html
+<!-- Supabase JavaScript-bibliotheek -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    // Vul hier de gegevens van jouw eigen Supabase-project in.
+    const SUPABASE_URL = "https://uldmdrhrrniynbgecsby.supabase.co/rest/v1/";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_aHpSMc2mXDJRM-FBvJ1GDA_gMByWSNY";
+
+    const supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+    // Eerste verbindingstest: de locaties ophalen.
+    async function testSupabaseConnection() {
+        const { data, error } = await supabaseClient
+            .from("venues")
+            .select("id, name")
+            .eq("is_active", true);
+
+        if (error) {
+            alert(
+                "Verbinding met Supabase mislukt.\n\n" +
+                error.message
+            );
+            return;
+        }
+
+        alert(
+            "Verbinding met Supabase gelukt! 🎉\n\n" +
+            data.length + " locaties gevonden."
+        );
+    }
+
+    testSupabaseConnection();
+</script>
+```
+
+  
 </body>
 </html>
