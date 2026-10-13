@@ -534,6 +534,14 @@ document.getElementById("wedstrijd-form")?.addEventListener("submit", async func
     knop.textContent = "Wedstrijd opslaan...";
 
     try {
+                // Extra controle voordat een wedstrijd wordt opgeslagen
+        const heeftToegang = await controleerBeheerder();
+
+        if (!heeftToegang) {
+            throw new Error(
+                "Je moet ingelogd zijn als LOL CUP-beheerder om wedstrijden te plannen."
+            );
+        }
         // De competitie ophalen
         const { data: competities, error: competitieFout } =
             await supabaseClient
