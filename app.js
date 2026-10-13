@@ -34,11 +34,11 @@ const views = {
 function showView(view) {
 const selected = Object.hasOwn(views, view) ? view : "overview";
 
-// Introductiekader alleen tonen op de homepagina
-const hero = document.querySelector(".home-intro");
+// Introductiekader alleen tonen op de overzichtspagina
+const hero = document.querySelector(".hero.home-intro");
 
 if (hero) {
-    hero.style.display = selected === "overview" ? "" : "none";
+    hero.hidden = selected !== "overview";
 }
 
 Object.keys(views).forEach(name => {
