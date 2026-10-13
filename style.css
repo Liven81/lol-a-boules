@@ -1099,3 +1099,11 @@ color: #777;
 font-size: 13px;
 }
 
+/* Uitlijning wedstrijdformulier */
+#wedstrijd-locatie {
+    width: 100%;
+}
+
+#wedstrijd-form .form-veld:has(#wedstrijd-locatie) {
+    grid-column: 1 / -1;
+}
