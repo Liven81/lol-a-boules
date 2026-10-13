@@ -77,22 +77,76 @@ const supabaseClient = window.supabase.createClient(
     SUPABASE_PUBLISHABLE_KEY
 );
 
-// 3. Beheerdersknop
-document.getElementById("adminButton").addEventListener("click", async () => {
-    const { data } = await supabaseClient.auth.getSession();
+// ========================================
+// 3. Beheerderslogin en toegangscontrole
+// ========================================
 
-    if (data.session) {
-        const bevestigen = confirm(
-            "Je bent ingelogd. Wil je uitloggen?"
-        );
+const adminButton = document.getElementById("adminButton");
+const wedstrijdFormulierContainer =
+    document.getElementById("wedstrijd-formulier-container");
+const wedstrijdBeheerInfo =
+    document.getElementById("wedstrijd-beheer-info");
 
-        if (bevestigen) {
+let beheerderIngelogd = false;
+
+// Controleren of de huidige gebruiker beheerder is
+async function controleerBeheerder() {
+    beheerderIngelogd = false;
+
+    const { data: sessieData, error: sessieFout } =
+        await supabaseClient.auth.getSession();
+
+    if (sessieFout) {
+        console.error("Sessie controleren mislukt:", sessieFout);
+    }
+
+    const sessie = sessieData?.session;
+
+    if (sessie) {
+        const { data: isBeheerder, error: beheerFout } =
+            await supabaseClient.rpc("is_lol_cup_admin");
+
+        if (beheerFout) {
+            console.error("Beheerdersrechten controleren mislukt:", beheerFout);
+        } else {
+            beheerderIngelogd = isBeheerder === true;
+        }
+    }
+
+    // Het wedstrijdformulier alleen tonen aan beheerders
+    wedstrijdFormulierContainer?.classList.toggle(
+        "hidden",
+        !beheerderIngelogd
+    );
+
+    wedstrijdBeheerInfo?.classList.toggle(
+        "hidden",
+        beheerderIngelogd
+    );
+
+    adminButton.textContent = beheerderIngelogd
+        ? "Uitloggen ↗"
+        : "Beheerder ↗";
+
+    return beheerderIngelogd;
+}
+
+// Bij het openen van de website de toegang controleren
+controleerBeheerder();
+
+// De knop bovenaan de website
+adminButton.addEventListener("click", async () => {
+    const heeftToegang = await controleerBeheerder();
+
+    if (heeftToegang) {
+        if (confirm("Wil je uitloggen uit het beheerdersgedeelte?")) {
             const { error } = await supabaseClient.auth.signOut();
 
             if (error) {
                 alert("Uitloggen is mislukt.");
                 console.error(error);
             } else {
+                await controleerBeheerder();
                 alert("Je bent uitgelogd.");
             }
         }
@@ -100,10 +154,16 @@ document.getElementById("adminButton").addEventListener("click", async () => {
         return;
     }
 
+    // Een bestaande login zonder beheerdersrechten opruimen
+    const { data: sessieData } = await supabaseClient.auth.getSession();
+
+    if (sessieData?.session) {
+        await supabaseClient.auth.signOut();
+    }
+
     document.getElementById("login-venster").classList.remove("hidden");
     document.getElementById("login-email").focus();
 });
-
 // 4. Speellocaties ophalen
 async function laadLocaties() {
     const locatieLijst = document.getElementById("locatie-lijst");
