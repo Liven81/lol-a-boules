@@ -710,3 +710,38 @@ html {
     overflow-y: scroll;
 }
 
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand-logo {
+  display: block;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.brand-text {
+  min-width: 0;
+}
+
+@media (max-width: 480px) {
+  .brand {
+    gap: 8px;
+  }
+
+  .brand-logo {
+    width: 46px;
+    height: 46px;
+  }
+
+  .brand-sub {
+    font-size: 11px;
+  }
+}
+
