@@ -1215,18 +1215,18 @@ margin-top: 0;
 
 /* Teamnummers kleuren volgens hun kolom */
 .team-kaart:nth-child(4n + 1) .team-nummer {
-color: #eab308;
+color: #22c55e; /* Groen */
 }
 
 .team-kaart:nth-child(4n + 2) .team-nummer {
-color: #3b82f6;
+color: #eab308; /* Geel */
 }
 
 .team-kaart:nth-child(4n + 3) .team-nummer {
-color: #ef4444;
+color: #3b82f6; /* Blauw */
 }
 
 .team-kaart:nth-child(4n + 4) .team-nummer {
-color: #22c55e;
+color: #ef4444; /* Rood */
 }
 
