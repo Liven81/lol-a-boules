@@ -5,31 +5,15 @@
 
 // 1. Navigatie tussen de onderdelen
 const views = {
-    overview: [
-        "De competitie",
-        "Alles voor LOL à boules 2027 op één plek."
-    ],
-    standings: [
-        "Het klassement",
-        "Volg de strijd om de eerste plaats."
-    ],
-    matches: [
-        "Wedstrijdkalender",
-        "Bekijk de geplande en bevestigde wedstrijden."
-    ],
-    locaties: [
-        "Onze speellocaties",
-        "Ontdek onze pleinen en ontmoetingsplaatsen."
-    ],
-    teams: [
-        "De teams",
-        "Leer de deelnemende teams kennen."
-    ],
-    rules: [
-        "Spelregels LOL CUP 2027",
-        "Alle afspraken voor een eerlijke en sportieve competitie."
-    ], 
+overview: ["De competitie", "Alles voor LOL à boules 2027 op één plek."],
+standings: ["Het klassement", "Volg de strijd om de eerste plaats."],
+kalender: ["Wedstrijdkalender", "Ontdek wanneer en waar de ploegen spelen."],
+matches: ["Wedstrijdbeheer", "Plan en beheer de wedstrijden."],
+locaties: ["Onze speellocaties", "Ontdek onze pleinen en ontmoetingsplaatsen."],
+teams: ["De teams", "Leer de deelnemende teams kennen."],
+rules: ["Spelregels LOL CUP 2027", "Alle afspraken voor een eerlijke en sportieve competitie."]
 };
+
 
 function showView(view) {
 const selected = Object.hasOwn(views, view) ? view : "overview";
@@ -241,6 +225,222 @@ async function laadLocaties() {
             </div>
         `;
     }).join("");
+}
+async function laadWedstrijdkalender() {
+const kalenderLijst = document.getElementById("kalender-lijst");
+
+if (!kalenderLijst) return;
+
+kalenderLijst.innerHTML = `
+    <p class="kalender-melding">
+        De wedstrijdkalender wordt geladen...
+    </p>
+`;
+
+try {
+    const { data: competitie, error: competitieFout } =
+        await supabaseClient
+            .from("competitions")
+            .select("id")
+            .eq("season_year", 2027)
+            .limit(1)
+            .maybeSingle();
+
+    if (competitieFout) throw competitieFout;
+
+    if (!competitie) {
+        kalenderLijst.innerHTML = `
+            <p class="kalender-melding">
+                De competitie van 2027 werd niet gevonden.
+            </p>
+        `;
+        return;
+    }
+
+    const { data: wedstrijden, error: wedstrijdenFout } =
+        await supabaseClient
+            .from("matches")
+            .select(`
+                id,
+                competition_id,
+                home_team_id,
+                away_team_id,
+                scheduled_at,
+                court_id,
+                public_welcome,
+                public_note
+            `)
+            .eq("competition_id", competitie.id)
+            .not("scheduled_at", "is", null)
+            .not("court_id", "is", null)
+            .order("scheduled_at", { ascending: true });
+
+    if (wedstrijdenFout) throw wedstrijdenFout;
+
+    if (!wedstrijden || wedstrijden.length === 0) {
+        kalenderLijst.innerHTML = `
+            <p class="kalender-melding">
+                Er zijn momenteel nog geen wedstrijden ingepland.
+                Kom later zeker eens terug!
+            </p>
+        `;
+        return;
+    }
+
+    const [
+        { data: teams, error: teamsFout },
+        { data: terreinen, error: terreinenFout },
+        { data: locaties, error: locatiesFout }
+    ] = await Promise.all([
+        supabaseClient
+            .from("teams")
+            .select("id, name")
+            .eq("competition_id", competitie.id),
+
+        supabaseClient
+            .from("courts")
+            .select("id, venue_id, name"),
+
+        supabaseClient
+            .from("venues")
+            .select("id, name, address")
+    ]);
+
+    if (teamsFout) throw teamsFout;
+    if (terreinenFout) throw terreinenFout;
+    if (locatiesFout) throw locatiesFout;
+
+    const teamsPerId = new Map(
+        (teams || []).map(team => [team.id, team])
+    );
+
+    const terreinenPerId = new Map(
+        (terreinen || []).map(terrein => [terrein.id, terrein])
+    );
+
+    const locatiesPerId = new Map(
+        (locaties || []).map(locatie => [locatie.id, locatie])
+    );
+
+    function escapeKalenderHtml(value) {
+        return String(value ?? "").replace(/[&<>"']/g, character => {
+            const entities = {
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+            };
+
+            return entities[character];
+        });
+    }
+
+    function formatKalenderDatum(datum) {
+        return new Intl.DateTimeFormat("nl-BE", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            timeZone: "Europe/Brussels"
+        }).format(new Date(datum));
+    }
+
+    function formatKalenderUur(datum) {
+        return new Intl.DateTimeFormat("nl-BE", {
+            hour: "2-digit",
+            minute: "2-digit",
+            timeZone: "Europe/Brussels"
+        }).format(new Date(datum));
+    }
+
+    kalenderLijst.innerHTML = wedstrijden.map(wedstrijd => {
+        const thuisploeg = teamsPerId.get(wedstrijd.home_team_id);
+        const uitploeg = teamsPerId.get(wedstrijd.away_team_id);
+        const terrein = terreinenPerId.get(wedstrijd.court_id);
+
+        const locatie = terrein
+            ? locatiesPerId.get(terrein.venue_id)
+            : null;
+
+        const datum = escapeKalenderHtml(
+            formatKalenderDatum(wedstrijd.scheduled_at)
+        );
+
+        const uur = escapeKalenderHtml(
+            formatKalenderUur(wedstrijd.scheduled_at)
+        );
+
+        const thuisNaam = escapeKalenderHtml(
+            thuisploeg?.name || "Onbekende thuisploeg"
+        );
+
+        const uitNaam = escapeKalenderHtml(
+            uitploeg?.name || "Onbekende uitploeg"
+        );
+
+        const terreinNaam = escapeKalenderHtml(
+            terrein?.name || "Speelplein"
+        );
+
+        const locatieNaam = escapeKalenderHtml(
+            locatie?.name || "Locatie niet beschikbaar"
+        );
+
+        const adres = locatie?.address
+            ? `<br>${escapeKalenderHtml(locatie.address)}`
+            : "";
+
+        const welkom = wedstrijd.public_welcome
+            ? `<p>${escapeKalenderHtml(wedstrijd.public_welcome)}</p>`
+            : "";
+
+        const opmerking = wedstrijd.public_note
+            ? `<p>${escapeKalenderHtml(wedstrijd.public_note)}</p>`
+            : "";
+
+        return `
+            <article class="kalender-wedstrijd">
+                <div class="kalender-datum">
+                    ${datum} · ${uur} uur
+                </div>
+
+                <div class="kalender-ploegen">
+                    <div class="kalender-ploeg">${thuisNaam}</div>
+                    <div class="kalender-tegen">VS</div>
+                    <div class="kalender-ploeg">${uitNaam}</div>
+                </div>
+
+                <div class="kalender-details">
+                    <div>
+                        <strong>Locatie:</strong>
+                        ${locatieNaam}${adres}
+                    </div>
+
+                    <div>
+                        <strong>Speelplein:</strong>
+                        ${terreinNaam}
+                    </div>
+
+                    ${welkom}
+                    ${opmerking}
+                </div>
+            </article>
+        `;
+    }).join("");
+
+} catch (error) {
+    console.error("Fout bij laden wedstrijdkalender:", error);
+
+    kalenderLijst.innerHTML = `
+        <p class="kalender-melding kalender-fout">
+            De wedstrijdkalender kon niet worden geladen.
+            Probeer het later opnieuw.
+        </p>
+    `;
+}
+
+
 }
 
 laadLocaties();
@@ -895,4 +1095,5 @@ loginFormulier.addEventListener("submit", async (event) => {
         loginKnop.textContent = "Inloggen";
     }
 });
+laadWedstrijdkalender();
 showView("overview");
