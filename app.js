@@ -55,9 +55,14 @@ if (sectionTitle) {
 if (sectionSubtitle) {
     sectionSubtitle.textContent = views[selected][1];
 }
-
 }
 
+// Navigatieknoppen laten werken
+document.querySelectorAll("[data-view]").forEach(button => {
+    button.addEventListener("click", () => {
+        showView(button.dataset.view);
+    });
+});
 
 // 2. Verbinding met Supabase
 const SUPABASE_URL = "https://uldmdrhrrniynbgecsby.supabase.co";
