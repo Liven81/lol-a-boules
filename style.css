@@ -163,12 +163,12 @@ header {
     right: -70px;
     top: -70px;
 
-    border: 25px solid var(--yellow);
+    border: 25px solid var(--red);
 
     box-shadow:
         0 0 0 23px var(--blue),
-        0 0 0 49px var(--green),
-        0 0 0 75px var(--red);
+        0 0 0 49px var(--yellow),
+        0 0 0 75px var(--green);
 
     opacity: 1;
     pointer-events: none;
