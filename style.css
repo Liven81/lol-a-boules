@@ -1187,3 +1187,28 @@ line-height: 1.3;
 margin-top: 0;
 margin-bottom: 8px;
 }
+
+/* Ploegnummer en ploegnaam op één lijn */
+.team-kaart {
+display: flex;
+align-items: flex-start;
+gap: 14px;
+}
+
+.team-kaart .team-nummer {
+flex-shrink: 0;
+font-size: 1.15rem;
+font-weight: 800;
+color: #f28c00;
+line-height: 1.3;
+padding-top: 0;
+}
+
+.team-kaart .team-info {
+flex: 1;
+min-width: 0;
+}
+
+.team-kaart .team-info h3 {
+margin-top: 0;
+}
