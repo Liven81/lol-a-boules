@@ -895,3 +895,4 @@ loginFormulier.addEventListener("submit", async (event) => {
         loginKnop.textContent = "Inloggen";
     }
 });
+showView("overview");
