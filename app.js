@@ -327,6 +327,21 @@ async function laadWedstrijdFormulier() {
     const uurInput = document.getElementById("wedstrijd-uur");
     const beschikbaarheidInfo =
         document.getElementById("beschikbaarheid-info");
+    
+    // Starturen instellen in stappen van 15 minuten
+uurInput.innerHTML = '<option value="">Kies een startuur</option>';
+
+for (let minuten = 8 * 60; minuten <= 22 * 60; minuten += 15) {
+    const uren = String(Math.floor(minuten / 60)).padStart(2, "0");
+    const resterendeMinuten = String(minuten % 60).padStart(2, "0");
+    const tijd = `${uren}:${resterendeMinuten}`;
+
+    const optie = document.createElement("option");
+    optie.value = tijd;
+    optie.textContent = tijd;
+
+    uurInput.appendChild(optie);
+}
 
     if (
         !thuisSelect ||
