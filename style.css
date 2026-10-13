@@ -1142,3 +1142,33 @@ font-size: 13px;
 .btn {
     text-decoration: none;
 }
+
+.team-kapitein {
+margin: 10px 0 8px;
+display: flex;
+flex-wrap: wrap;
+align-items: center;
+gap: 8px;
+}
+
+.kapitein-label {
+font-size: 0.75rem;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 0.04em;
+padding: 4px 8px;
+border-radius: 20px;
+background: rgba(255, 140, 0, 0.15);
+color: #d97706;
+}
+
+.team-spelers {
+list-style: none;
+padding: 0;
+margin: 0;
+}
+
+.team-spelers li {
+padding: 3px 0;
+line-height: 1.5;
+}
