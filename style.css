@@ -1,5 +1,5 @@
 /* ========================================
-   LOL à boules 2027
+   LOL cup 2027
    Algemene huisstijl
    ======================================== */
 
@@ -162,10 +162,11 @@ header {
     border-radius: 50%;
     right: -70px;
     top: -70px;
-    border: 25px solid rgba(242, 201, 76, .20);
+    border: 25px solid rgba(242, 201, 76, .55);
     box-shadow:
-        0 0 0 23px rgba(57, 120, 197, .07),
-        0 0 0 49px rgba(46, 125, 85, .06);
+        0 0 0 23px rgba(57, 120, 197, .30),
+        0 0 0 49px rgba(46, 125, 85, .25),
+        0 0 0 75px rgba(228, 90, 79, .20);
     pointer-events: none;
 }
 
