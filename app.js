@@ -630,7 +630,8 @@ loginFormulier.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const email = document.getElementById("login-email").value.trim();
-    const wachtwoord = document.getElementById("login-wachtwoord").value;
+    const wachtwoord =
+        document.getElementById("login-wachtwoord").value;
 
     loginKnop.disabled = true;
     loginKnop.textContent = "Even wachten...";
@@ -639,29 +640,41 @@ loginFormulier.addEventListener("submit", async (event) => {
     loginMelding.textContent = "";
 
     try {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: wachtwoord
-        });
+        const { error: loginFout } =
+            await supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: wachtwoord
+            });
 
-        if (error) {
-            throw error;
+        if (loginFout) {
+            throw loginFout;
         }
 
-        if (!data.session) {
-            throw new Error("Er kon geen actieve sessie worden gestart.");
+        // Controleren of dit account ook echt beheerder is
+        const heeftToegang = await controleerBeheerder();
+
+        if (!heeftToegang) {
+            await supabaseClient.auth.signOut();
+            await controleerBeheerder();
+
+            throw new Error("GEEN_BEHEERDERSRECHTEN");
         }
 
         loginVenster.classList.add("hidden");
         loginFormulier.reset();
 
-        alert("Je bent succesvol ingelogd!");
+        alert("Welkom! Je bent ingelogd als LOL CUP-beheerder.");
 
     } catch (error) {
         console.error("Inloggen mislukt:", error);
 
-        loginMelding.textContent =
-            "Inloggen mislukt. Controleer je e-mailadres en wachtwoord.";
+        if (error.message === "GEEN_BEHEERDERSRECHTEN") {
+            loginMelding.textContent =
+                "Je account heeft geen beheerdersrechten voor LOL CUP.";
+        } else {
+            loginMelding.textContent =
+                "Inloggen mislukt. Controleer je e-mailadres en wachtwoord.";
+        }
 
         loginMelding.classList.remove("hidden");
 
