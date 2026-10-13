@@ -24,7 +24,11 @@ const views = {
     teams: [
         "De teams",
         "Leer de deelnemende teams kennen."
-    ]
+    ],
+    rules: [
+        "Spelregels LOL CUP 2027",
+        "Alle afspraken voor een eerlijke en sportieve competitie."
+    ] 
 };
 
 function showView(view) {
