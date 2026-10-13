@@ -240,151 +240,195 @@ laadLocaties();
 // Teams ophalen en weergeven
 // ========================================
 
+// ========================================
+// Teams en deelnemers ophalen en weergeven
+// ========================================
+
 async function laadTeams() {
-const teamLijst = document.getElementById("team-lijst");
+    const teamLijst = document.getElementById("team-lijst");
 
+    if (!teamLijst) {
+        return;
+    }
 
-if (!teamLijst) {
-    return;
-}
+    try {
+        teamLijst.innerHTML =
+            '<p class="muted">De teams worden geladen...</p>';
 
-try {
-    teamLijst.innerHTML =
-        '<p class="muted">De teams worden geladen...</p>';
-
-    // De competitie van 2027 ophalen
-    const { data: competities, error: competitieFout } =
-        await supabaseClient
+        // De competitie van 2027 ophalen
+        const {
+            data: competities,
+            error: competitieFout
+        } = await supabaseClient
             .from("competitions")
             .select("id")
             .eq("season_year", 2027)
             .limit(1);
 
-    if (competitieFout) {
-        throw competitieFout;
-    }
+        if (competitieFout) {
+            throw competitieFout;
+        }
 
-    if (!competities || competities.length === 0) {
-        teamLijst.innerHTML =
-            '<p class="muted">De competitie van 2027 is nog niet aangemaakt.</p>';
-        return;
-    }
+        if (!competities || competities.length === 0) {
+            teamLijst.innerHTML =
+                '<p class="muted">De competitie van 2027 is nog niet aangemaakt.</p>';
+            return;
+        }
 
-    const competitieId = competities[0].id;
+        const competitieId = competities[0].id;
 
-    // De teams ophalen
-    const { data: teams, error: teamsFout } =
-        await supabaseClient
+        // De teams ophalen
+        const {
+            data: teams,
+            error: teamsFout
+        } = await supabaseClient
             .from("teams")
             .select("id, name")
             .eq("competition_id", competitieId)
             .order("name");
 
-    if (teamsFout) {
-        throw teamsFout;
-    }
+        if (teamsFout) {
+            throw teamsFout;
+        }
 
-    if (!teams || teams.length === 0) {
-        teamLijst.innerHTML = `
-            <div class="empty">
-                <div class="empty-icon">👥</div>
-                <strong>De ploegen worden samengesteld!</strong>
-                <p>Zodra de eerste teams geregistreerd zijn, verschijnen ze hier.</p>
-            </div>
-        `;
-        return;
-    }
+        if (!teams || teams.length === 0) {
+            teamLijst.innerHTML = `
+                <div class="empty">
+                    <div class="empty-icon">👥</div>
+                    <strong>De ploegen worden samengesteld!</strong>
+                    <p>Zodra de eerste teams geregistreerd zijn, verschijnen ze hier.</p>
+                </div>
+            `;
+            return;
+        }
 
-    // Alle actieve deelnemers van deze teams ophalen
-    const teamIds = teams.map(team => team.id);
+        // De actieve deelnemers van alle teams ophalen
+        const teamIds = teams.map(team => team.id);
 
-    const { data: spelers, error: spelersFout } =
-        await supabaseClient
+        const {
+            data: spelers,
+            error: spelersFout
+        } = await supabaseClient
             .from("players")
-            .select("id, team_id, first_name, last_name, is_captain")
+            .select(
+                "id, team_id, first_name, last_name, is_captain"
+            )
             .in("team_id", teamIds)
             .eq("is_active", true);
 
-    if (spelersFout) {
-        throw spelersFout;
-    }
+        if (spelersFout) {
+            throw spelersFout;
+        }
 
-    // De teamkaarten opbouwen
-    teamLijst.innerHTML = `
-        <div class="team-grid">
-            ${teams.map((team, index) => {
-                const teamSpelers = (spelers || [])
-                    .filter(speler => speler.team_id === team.id)
-                    .sort((a, b) => {
-                        // De kapitein altijd eerst
-                        if (a.is_captain && !b.is_captain) return -1;
-                        if (!a.is_captain && b.is_captain) return 1;
-
-                        return a.last_name.localeCompare(b.last_name);
-                    });
-
-                const kapitein = teamSpelers.find(
-                    speler => speler.is_captain
-                );
-
-                const andereSpelers = teamSpelers.filter(
-                    speler => !speler.is_captain
-                );
-
-                return `
-                    <article class="team-kaart">
-                        <div class="team-nummer">
-                            ${String(index + 1).padStart(2, "0")}
-                        </div>
-
-                        <div class="team-info">
-                            <h3>${escapeHtml(team.name)}</h3>
-
-                            ${
-                                kapitein
-                                    ? `
-                                        <p class="team-kapitein">
-                                            <strong>
-                                                ${escapeHtml(kapitein.first_name)}
-                                                ${escapeHtml(kapitein.last_name)}
-                                            </strong>
-                                            <span class="kapitein-label">Kapitein</span>
-                                        </p>
-                                    `
-                                    : ""
+        // De teamkaarten opbouwen
+        teamLijst.innerHTML = `
+            <div class="team-grid">
+                ${teams.map((team, index) => {
+                    const teamSpelers = (spelers || [])
+                        .filter(speler => speler.team_id === team.id)
+                        .sort((a, b) => {
+                            // Kapitein altijd eerst
+                            if (a.is_captain && !b.is_captain) {
+                                return -1;
                             }
 
-                            ${
-                                andereSpelers.length > 0
-                                    ? `
-                                        <ul class="team-spelers">
-                                            ${andereSpelers.map(speler => `
-                                                <li>
-                                                    ${escapeHtml(speler.first_name)}
-                                                    ${escapeHtml(speler.last_name)}
-                                                </li>
-                                            `).join("")}
-                                        </ul>
-                                    `
-                                    : !kapitein
-                                        ? '<p class="muted">Deelnemers volgen binnenkort.</p>'
+                            if (!a.is_captain && b.is_captain) {
+                                return 1;
+                            }
+
+                            return (
+                                (a.last_name || "").localeCompare(
+                                    b.last_name || "",
+                                    "nl"
+                                )
+                            );
+                        });
+
+                    const kapitein = teamSpelers.find(
+                        speler => speler.is_captain
+                    );
+
+                    const overigeSpelers = teamSpelers.filter(
+                        speler => !speler.is_captain
+                    );
+
+                    const volledigeNaam = speler =>
+                        escapeHtml(
+                            `${speler.first_name || ""} ${speler.last_name || ""}`.trim()
+                        );
+
+                    return `
+                        <article class="team-kaart">
+                            <div class="team-nummer">
+                                ${String(index + 1).padStart(2, "0")}
+                            </div>
+
+                            <div class="team-info">
+                                <h3>${escapeHtml(team.name)}</h3>
+
+                                <p>
+                                    ${teamSpelers.length}
+                                    ${teamSpelers.length === 1
+                                        ? "deelnemer"
+                                        : "deelnemers"}
+                                </p>
+
+                                ${
+                                    kapitein
+                                        ? `
+                                            <div class="team-kapitein">
+                                                <strong>
+                                                    ${volledigeNaam(kapitein)}
+                                                </strong>
+
+                                                <span class="kapitein-label">
+                                                    Kapitein
+                                                </span>
+                                            </div>
+                                        `
+                                        : `
+                                            <p class="muted">
+                                                Nog geen kapitein aangeduid.
+                                            </p>
+                                        `
+                                }
+
+                                ${
+                                    overigeSpelers.length > 0
+                                        ? `
+                                            <ul class="team-spelers">
+                                                ${overigeSpelers.map(speler => `
+                                                    <li>
+                                                        ${volledigeNaam(speler)}
+                                                    </li>
+                                                `).join("")}
+                                            </ul>
+                                        `
                                         : ""
-                            }
-                        </div>
-                    </article>
-                `;
-            }).join("")}
-        </div>
-    `;
+                                }
 
-} catch (fout) {
-    console.error("Teams laden mislukt:", fout);
+                                ${
+                                    teamSpelers.length === 0
+                                        ? `
+                                            <p class="muted">
+                                                Deelnemers volgen binnenkort.
+                                            </p>
+                                        `
+                                        : ""
+                                }
+                            </div>
+                        </article>
+                    `;
+                }).join("")}
+            </div>
+        `;
 
-    teamLijst.innerHTML =
-        '<p class="muted">De teams konden momenteel niet worden geladen.</p>';
-}
+    } catch (fout) {
+        console.error("Teams laden mislukt:", fout);
 
-
+        teamLijst.innerHTML =
+            '<p class="muted">De teams konden momenteel niet worden geladen.</p>';
+    }
 }
 
 
