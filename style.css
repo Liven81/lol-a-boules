@@ -154,6 +154,7 @@ header {
     box-shadow: 0 16px 45px rgba(28, 48, 34, .06);
 }
 
+```css
 .hero:after {
     content: "";
     position: absolute;
@@ -162,13 +163,19 @@ header {
     border-radius: 50%;
     right: -70px;
     top: -70px;
-    border: 25px solid rgba(242, 201, 76, .55);
+
+    border: 25px solid var(--yellow);
+
     box-shadow:
-        0 0 0 23px rgba(57, 120, 197, .30),
-        0 0 0 49px rgba(46, 125, 85, .25),
-        0 0 0 75px rgba(228, 90, 79, .20);
+        0 0 0 23px var(--blue),
+        0 0 0 49px var(--green),
+        0 0 0 75px var(--red);
+
+    opacity: 0.8;
     pointer-events: none;
 }
+```
+
 
 .eyebrow {
     display: inline-block;
