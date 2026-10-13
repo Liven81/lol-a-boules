@@ -343,15 +343,16 @@ for (let minuten = 8 * 60; minuten <= 22 * 60; minuten += 15) {
     uurInput.appendChild(optie);
 }
 
-    if (
-        !thuisSelect ||
-        !uitSelect ||
-        !locatieSelect ||
-        !datumInput ||
-        !uurInput
-    ) {
-        return;
-    }
+if (
+    !thuisSelect ||
+    !uitSelect ||
+    !locatieSelect ||
+    !datumInput ||
+    !uurInput
+) {
+    console.error("Wedstrijdformulier: een of meer velden ontbreken.");
+    return;
+}
 
     // Competitie ophalen
     const { data: competities, error: competitieFout } =
