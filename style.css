@@ -1173,15 +1173,17 @@ padding: 3px 0;
 line-height: 1.5;
 }
 
-/* Duidelijk onderscheid tussen ploegnaam en spelers */
-.team-card h3 {
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: #f28c00;
-    margin-bottom: 14px;
+/* Ploegnaam duidelijk onderscheiden van de kapitein */
+.team-kaart .team-info h3 {
+font-size: 1.15rem;
+font-weight: 800;
+color: #f28c00;
+margin-bottom: 16px;
+line-height: 1.3;
 }
 
-.team-kapitein {
-    margin-top: 0;
-    margin-bottom: 8px;
+/* Kapitein en overige spelers */
+.team-kaart .team-kapitein {
+margin-top: 0;
+margin-bottom: 8px;
 }
