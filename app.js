@@ -174,12 +174,13 @@ laadLocaties();
 async function laadTeams() {
 const teamLijst = document.getElementById("team-lijst");
 
+
 if (!teamLijst) {
     return;
 }
 
 try {
-    teamLijst.innerHTML = <p class="muted">De teams worden geladen...</p>;
+    teamLijst.innerHTML = '<p class="muted">De teams worden geladen...</p>';
 
     // De competitie van 2027 ophalen
     const { data: competities, error: competitieFout } =
@@ -195,7 +196,7 @@ try {
 
     if (!competities || competities.length === 0) {
         teamLijst.innerHTML =
-            <p class="muted">De competitie van 2027 is nog niet aangemaakt.</p>;
+            '<p class="muted">De competitie van 2027 is nog niet aangemaakt.</p>';
         return;
     }
 
@@ -212,19 +213,19 @@ try {
     }
 
     if (!teams || teams.length === 0) {
-        teamLijst.innerHTML = 
+        teamLijst.innerHTML = `
             <div class="empty">
                 <div class="empty-icon">👥</div>
                 <strong>De ploegen worden samengesteld!</strong>
                 <p>Zodra de eerste teams geregistreerd zijn, verschijnen ze hier.</p>
             </div>
-        ;
+        `;
         return;
     }
 
-    teamLijst.innerHTML = 
+    teamLijst.innerHTML = `
         <div class="team-grid">
-            ${teams.map((team, index) => 
+            ${teams.map((team, index) => `
                 <article class="team-kaart">
                     <div class="team-nummer">${String(index + 1).padStart(2, "0")}</div>
                     <div class="team-info">
@@ -232,20 +233,22 @@ try {
                         <p>Deelnemer LOL CUP 2027</p>
                     </div>
                 </article>
-            ).join("")}
+            `).join("")}
         </div>
-    ;
+    `;
 
 } catch (fout) {
     console.error("Teams laden mislukt:", fout);
 
     teamLijst.innerHTML =
-        <p class="muted">De teams konden momenteel niet worden geladen.</p>;
+        '<p class="muted">De teams konden momenteel niet worden geladen.</p>';
 }
+
 
 }
 
 laadTeams();
+
 
 
 // ========================================
