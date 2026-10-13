@@ -1,2 +1,2 @@
-# lol-a-boules
-LOL à boules – Van straat tot plein, samen moet het LOL zijn!
+# LOL CUP
+LOL cup – Van straat tot plein, samen moet het LOL zijn!
