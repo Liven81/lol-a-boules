@@ -32,13 +32,14 @@ const views = {
 };
 
 function showView(view) {
+const selected = Object.hasOwn(views, view) ? view : "overview";
+
+// Introductiekader alleen tonen op de homepagina
 const hero = document.querySelector(".home-intro");
 
 if (hero) {
-    hero.style.display = view === "home" ? "" : "none";
+    hero.style.display = selected === "home" ? "" : "none";
 }
-    
-const selected = Object.hasOwn(views, view) ? view : "overview";
 
 Object.keys(views).forEach(name => {
     const section = document.getElementById(name + "View");
@@ -65,7 +66,9 @@ if (sectionTitle) {
 if (sectionSubtitle) {
     sectionSubtitle.textContent = views[selected][1];
 }
+
 }
+
 
 // Navigatieknoppen laten werken
 document.querySelectorAll("[data-view]").forEach(button => {
