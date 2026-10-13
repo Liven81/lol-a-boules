@@ -29,9 +29,6 @@ const views = {
         "Spelregels LOL CUP 2027",
         "Alle afspraken voor een eerlijke en sportieve competitie."
     ], 
-    kalender: [
-        "Wedstrijdkalender", "Bekijk de geplande en bevestigde wedstrijden."
-    ],
 };
 
 function showView(view) {
