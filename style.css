@@ -154,7 +154,6 @@ header {
     box-shadow: 0 16px 45px rgba(28, 48, 34, .06);
 }
 
-```css
 .hero:after {
     content: "";
     position: absolute;
@@ -171,11 +170,9 @@ header {
         0 0 0 49px var(--green),
         0 0 0 75px var(--red);
 
-    opacity: 0.8;
+    opacity: 1;
     pointer-events: none;
 }
-```
-
 
 .eyebrow {
     display: inline-block;
