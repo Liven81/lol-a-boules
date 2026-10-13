@@ -307,6 +307,34 @@ async function laadWedstrijdFormulier() {
     uitSelect.innerHTML =
         '<option value="">Kies de uitploeg</option>' + teamOpties;
 
+    // Voorkomen dat dezelfde ploeg twee keer gekozen wordt
+function updateTeamKeuzes() {
+    const thuisId = thuisSelect.value;
+    const uitId = uitSelect.value;
+
+    // Als beide ploegen gelijk zijn, de andere keuze wissen
+    if (thuisId && thuisId === uitId) {
+        uitSelect.value = "";
+    }
+
+    // De gekozen thuisploeg uitsluiten bij de uitploeg
+    Array.from(uitSelect.options).forEach(optie => {
+        optie.disabled =
+            optie.value !== "" && optie.value === thuisSelect.value;
+    });
+
+    // De gekozen uitploeg uitsluiten bij de thuisploeg
+    Array.from(thuisSelect.options).forEach(optie => {
+        optie.disabled =
+            optie.value !== "" && optie.value === uitSelect.value;
+    });
+}
+
+thuisSelect.addEventListener("change", updateTeamKeuzes);
+uitSelect.addEventListener("change", updateTeamKeuzes);
+
+updateTeamKeuzes();
+
     // Actieve locaties ophalen
     const { data: locaties, error: locatiesFout } = await supabaseClient
         .from("venues")
