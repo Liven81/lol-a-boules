@@ -32,6 +32,12 @@ const views = {
 };
 
 function showView(view) {
+const hero = document.querySelector(".home-intro");
+
+if (hero) {
+    hero.style.display = view === "home" ? "" : "none";
+}
+    
 const selected = Object.hasOwn(views, view) ? view : "overview";
 
 Object.keys(views).forEach(name => {
