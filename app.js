@@ -181,7 +181,7 @@ async function laadWedstrijdFormulier() {
         .limit(1);
 
     if (competitieFout || !competities || competities.length === 0) {
-        console.error("Competitie laden mislukt:", competitieFout?.message);
+        console.error("Competitie laden mislukt:", competitieFout, competities);
         toonWedstrijdMelding("De competitie kon niet worden geladen.");
         return;
     }
