@@ -1212,3 +1212,21 @@ min-width: 0;
 .team-kaart .team-info h3 {
 margin-top: 0;
 }
+
+/* Teamnummers kleuren volgens hun kolom */
+.team-kaart:nth-child(4n + 1) .team-nummer {
+color: #eab308;
+}
+
+.team-kaart:nth-child(4n + 2) .team-nummer {
+color: #3b82f6;
+}
+
+.team-kaart:nth-child(4n + 3) .team-nummer {
+color: #ef4444;
+}
+
+.team-kaart:nth-child(4n + 4) .team-nummer {
+color: #22c55e;
+}
+
