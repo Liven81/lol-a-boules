@@ -82,6 +82,8 @@ const supabaseClient = window.supabase.createClient(
 // ========================================
 
 const adminButton = document.getElementById("adminButton");
+const wedstrijdbeheerNav =
+    document.getElementById("wedstrijdbeheer-nav");
 const wedstrijdFormulierContainer =
     document.getElementById("wedstrijd-formulier-container");
 const wedstrijdBeheerInfo =
@@ -118,6 +120,12 @@ async function controleerBeheerder() {
         "hidden",
         !beheerderIngelogd
     );
+
+    // De navigatieknop alleen tonen aan beheerders
+wedstrijdbeheerNav?.classList.toggle(
+    "hidden",
+    !beheerderIngelogd
+);
 
     wedstrijdBeheerInfo?.classList.toggle(
         "hidden",
@@ -164,6 +172,7 @@ adminButton.addEventListener("click", async () => {
     document.getElementById("login-venster").classList.remove("hidden");
     document.getElementById("login-email").focus();
 });
+
 // 4. Speellocaties ophalen
 async function laadLocaties() {
     const locatieLijst = document.getElementById("locatie-lijst");
