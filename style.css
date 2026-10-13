@@ -1230,11 +1230,3 @@ color: #3b82f6; /* Blauw */
 color: #ef4444; /* Rood */
 }
 
-/* Introductiekader alleen zichtbaar op de homepagina */
-.home-intro {
-    display: none;
-}
-
-#homeView .home-intro {
-    display: block;
-}
