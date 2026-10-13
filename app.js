@@ -190,6 +190,9 @@ try {
             .eq("season_year", 2027)
             .limit(1);
 
+    console.log("Competities:", competities);
+console.log("Competitie-fout:", competitieFout);
+
     if (competitieFout) {
         throw competitieFout;
     }
