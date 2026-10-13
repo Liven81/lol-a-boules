@@ -249,7 +249,8 @@ if (!teamLijst) {
 }
 
 try {
-    teamLijst.innerHTML = '<p class="muted">De teams worden geladen...</p>';
+    teamLijst.innerHTML =
+        '<p class="muted">De teams worden geladen...</p>';
 
     // De competitie van 2027 ophalen
     const { data: competities, error: competitieFout } =
@@ -258,9 +259,6 @@ try {
             .select("id")
             .eq("season_year", 2027)
             .limit(1);
-
-    console.log("Competities:", competities);
-console.log("Competitie-fout:", competitieFout);
 
     if (competitieFout) {
         throw competitieFout;
@@ -272,12 +270,14 @@ console.log("Competitie-fout:", competitieFout);
         return;
     }
 
-    // De teams van deze competitie ophalen
+    const competitieId = competities[0].id;
+
+    // De teams ophalen
     const { data: teams, error: teamsFout } =
         await supabaseClient
             .from("teams")
             .select("id, name")
-            .eq("competition_id", competities[0].id)
+            .eq("competition_id", competitieId)
             .order("name");
 
     if (teamsFout) {
@@ -295,17 +295,85 @@ console.log("Competitie-fout:", competitieFout);
         return;
     }
 
+    // Alle actieve deelnemers van deze teams ophalen
+    const teamIds = teams.map(team => team.id);
+
+    const { data: spelers, error: spelersFout } =
+        await supabaseClient
+            .from("players")
+            .select("id, team_id, first_name, last_name, is_captain")
+            .in("team_id", teamIds)
+            .eq("is_active", true);
+
+    if (spelersFout) {
+        throw spelersFout;
+    }
+
+    // De teamkaarten opbouwen
     teamLijst.innerHTML = `
         <div class="team-grid">
-            ${teams.map((team, index) => `
-                <article class="team-kaart">
-                    <div class="team-nummer">${String(index + 1).padStart(2, "0")}</div>
-                    <div class="team-info">
-                        <h3>${escapeHtml(team.name)}</h3>
-                        <p>Deelnemer LOL CUP 2027</p>
-                    </div>
-                </article>
-            `).join("")}
+            ${teams.map((team, index) => {
+                const teamSpelers = (spelers || [])
+                    .filter(speler => speler.team_id === team.id)
+                    .sort((a, b) => {
+                        // De kapitein altijd eerst
+                        if (a.is_captain && !b.is_captain) return -1;
+                        if (!a.is_captain && b.is_captain) return 1;
+
+                        return a.last_name.localeCompare(b.last_name);
+                    });
+
+                const kapitein = teamSpelers.find(
+                    speler => speler.is_captain
+                );
+
+                const andereSpelers = teamSpelers.filter(
+                    speler => !speler.is_captain
+                );
+
+                return `
+                    <article class="team-kaart">
+                        <div class="team-nummer">
+                            ${String(index + 1).padStart(2, "0")}
+                        </div>
+
+                        <div class="team-info">
+                            <h3>${escapeHtml(team.name)}</h3>
+
+                            ${
+                                kapitein
+                                    ? `
+                                        <p class="team-kapitein">
+                                            <strong>
+                                                ${escapeHtml(kapitein.first_name)}
+                                                ${escapeHtml(kapitein.last_name)}
+                                            </strong>
+                                            <span class="kapitein-label">Kapitein</span>
+                                        </p>
+                                    `
+                                    : ""
+                            }
+
+                            ${
+                                andereSpelers.length > 0
+                                    ? `
+                                        <ul class="team-spelers">
+                                            ${andereSpelers.map(speler => `
+                                                <li>
+                                                    ${escapeHtml(speler.first_name)}
+                                                    ${escapeHtml(speler.last_name)}
+                                                </li>
+                                            `).join("")}
+                                        </ul>
+                                    `
+                                    : !kapitein
+                                        ? '<p class="muted">Deelnemers volgen binnenkort.</p>'
+                                        : ""
+                            }
+                        </div>
+                    </article>
+                `;
+            }).join("")}
         </div>
     `;
 
@@ -318,6 +386,7 @@ console.log("Competitie-fout:", competitieFout);
 
 
 }
+
 
 laadTeams();
 
