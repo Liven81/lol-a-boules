@@ -366,13 +366,6 @@ async function laadTeams() {
                             <div class="team-info">
                                 <h3>${escapeHtml(team.name)}</h3>
 
-                                <p>
-                                    ${teamSpelers.length}
-                                    ${teamSpelers.length === 1
-                                        ? "deelnemer"
-                                        : "deelnemers"}
-                                </p>
-
                                 ${
                                     kapitein
                                         ? `
@@ -381,9 +374,6 @@ async function laadTeams() {
                                                     ${volledigeNaam(kapitein)}
                                                 </strong>
 
-                                                <span class="kapitein-label">
-                                                    Kapitein
-                                                </span>
                                             </div>
                                         `
                                         : `
