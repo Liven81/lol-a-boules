@@ -224,7 +224,7 @@ try {
 
     teamLijst.innerHTML = 
         <div class="team-grid">
-            ${teams.map((team, index) => `
+            ${teams.map((team, index) => 
                 <article class="team-kaart">
                     <div class="team-nummer">${String(index + 1).padStart(2, "0")}</div>
                     <div class="team-info">
