@@ -750,3 +750,190 @@ html {
   }
 }
 
+/* ========================================
+   Spelregels LOL CUP
+   ======================================== */
+
+#rulesView {
+    grid-column: 1 / -1;
+    min-width: 0;
+}
+
+.rules-highlights {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin: 22px 0;
+}
+
+.rules-highlight {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #fafbf8;
+}
+
+.rules-highlight:nth-child(1) {
+    border-top: 4px solid var(--green);
+}
+
+.rules-highlight:nth-child(2) {
+    border-top: 4px solid var(--yellow);
+}
+
+.rules-highlight:nth-child(3) {
+    border-top: 4px solid var(--blue);
+}
+
+.rules-number {
+    font-size: 1.2rem;
+    font-weight: 900;
+    letter-spacing: -.03em;
+}
+
+.rules-label {
+    color: var(--muted);
+    font-size: .85rem;
+}
+
+.rules-card {
+    margin-top: 16px;
+    padding: 24px;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+}
+
+.rules-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 16px;
+    font-size: 1.15rem;
+}
+
+.rules-index {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+    background: #edf5ee;
+    color: var(--green);
+    font-size: .85rem;
+    font-weight: 900;
+}
+
+.rules-card h4 {
+    margin: 22px 0 8px;
+    font-size: 1rem;
+}
+
+.rules-card p,
+.rules-card li {
+    color: var(--muted);
+    font-size: .94rem;
+    line-height: 1.7;
+}
+
+.rules-card p {
+    margin: 0 0 12px;
+}
+
+.rules-card ul {
+    padding-left: 22px;
+    margin: 12px 0 0;
+}
+
+.rules-card li + li {
+    margin-top: 6px;
+}
+
+.rules-warning,
+.rules-example {
+    margin-top: 18px;
+    padding: 17px;
+    border-radius: 12px;
+    background: #fff7db;
+    border-left: 4px solid var(--yellow);
+}
+
+.rules-warning strong,
+.rules-example strong {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--ink);
+}
+
+.rules-warning p,
+.rules-example p {
+    margin: 0;
+}
+
+.rules-outcome {
+    display: grid;
+    gap: 10px;
+    margin: 16px 0;
+}
+
+.rules-outcome-item {
+    padding: 15px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fafbf8;
+}
+
+.rules-outcome-item strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.rules-outcome-item p {
+    margin: 0;
+}
+
+.rules-footer {
+    margin-top: 18px;
+    padding: 24px;
+    border-radius: 16px;
+    background: #edf5ee;
+    border-left: 5px solid var(--green);
+}
+
+.rules-footer strong {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--green);
+    font-size: 1.1rem;
+}
+
+.rules-footer p {
+    margin: 0;
+    color: var(--ink);
+    line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+    .rules-highlights {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .rules-highlight {
+        padding: 14px 16px;
+    }
+
+    .rules-card {
+        padding: 18px;
+    }
+
+    .rules-card h3 {
+        font-size: 1.05rem;
+    }
+}
+
