@@ -524,6 +524,12 @@ footer {
         padding: 9px 10px;
         font-size: .86rem;
     }
+
+   nav button,
+nav .nav-link {
+    padding: 9px 10px;
+    font-size: .86rem;
+}
 }
 
 @media (max-width: 600px) {
