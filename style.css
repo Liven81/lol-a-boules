@@ -1229,29 +1229,3 @@ color: #3b82f6; /* Blauw */
 .team-kaart:nth-child(4n + 4) .team-nummer {
 color: #ef4444; /* Rood */
 }
-
-/* Titelbalk met logo rechts */
-.page-heading {
-display: flex;
-align-items: center;
-justify-content: space-between;
-gap: 16px;
-}
-
-.page-heading h2 {
-margin: 0;
-}
-
-.page-heading-logo {
-display: block;
-width: 100px;
-height: auto;
-object-fit: contain;
-flex-shrink: 0;
-}
-
-@media (max-width: 480px) {
-.page-heading-logo {
-width: 72px;
-}
-}
