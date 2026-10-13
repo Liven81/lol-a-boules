@@ -327,6 +327,17 @@ async function laadWedstrijdFormulier() {
     const uurInput = document.getElementById("wedstrijd-uur");
     const beschikbaarheidInfo =
         document.getElementById("beschikbaarheid-info");
+
+    if (
+    !thuisSelect ||
+    !uitSelect ||
+    !locatieSelect ||
+    !datumInput ||
+    !uurInput
+) {
+    console.error("Wedstrijdformulier: een of meer velden ontbreken.");
+    return;
+}
     
     // Starturen instellen in stappen van 15 minuten
 uurInput.innerHTML = '<option value="">Kies een startuur</option>';
@@ -343,16 +354,7 @@ for (let minuten = 8 * 60; minuten <= 22 * 60; minuten += 15) {
     uurInput.appendChild(optie);
 }
 
-if (
-    !thuisSelect ||
-    !uitSelect ||
-    !locatieSelect ||
-    !datumInput ||
-    !uurInput
-) {
-    console.error("Wedstrijdformulier: een of meer velden ontbreken.");
-    return;
-}
+
 
     // Competitie ophalen
     const { data: competities, error: competitieFout } =
