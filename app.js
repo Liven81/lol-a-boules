@@ -38,7 +38,7 @@ const selected = Object.hasOwn(views, view) ? view : "overview";
 const hero = document.querySelector(".home-intro");
 
 if (hero) {
-    hero.style.display = selected === "home" ? "" : "none";
+    hero.style.display = selected === "overview" ? "" : "none";
 }
 
 Object.keys(views).forEach(name => {
