@@ -1,1 +1,165 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>Wedstrijdkalender | LOL CUP 2027</title>
+    <meta
+        name="description"
+        content="Bekijk de geplande wedstrijden van LOL CUP 2027."
+    >
+
+    <link rel="icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .kalender-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 24px 16px 48px;
+        }
+
+        .kalender-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .kalender-logo {
+            display: block;
+            width: min(220px, 65vw);
+            height: auto;
+        }
+
+        .kalender-terug {
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .kalender-intro {
+            margin-bottom: 28px;
+        }
+
+        .kalender-lijst {
+            display: grid;
+            gap: 16px;
+        }
+
+        .kalender-wedstrijd {
+            padding: 22px;
+            border-radius: 14px;
+            border: 1px solid var(--border, #ddd);
+            background: var(--card, #fff);
+        }
+
+        .kalender-datum {
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .kalender-ploegen {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 14px;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .kalender-ploeg:last-child {
+            text-align: right;
+        }
+
+        .kalender-tegen {
+            opacity: 0.65;
+            font-size: 0.9rem;
+        }
+
+        .kalender-details {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border, #ddd);
+            line-height: 1.8;
+        }
+
+        .kalender-status {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .kalender-melding {
+            padding: 20px;
+            border-radius: 12px;
+            background: var(--card, #fff);
+        }
+
+        .kalender-fout {
+            color: #b42318;
+        }
+
+        @media (max-width: 520px) {
+            .kalender-wedstrijd {
+                padding: 16px;
+            }
+
+            .kalender-ploegen {
+                grid-template-columns: 1fr;
+                gap: 8px;
+                font-size: 1rem;
+            }
+
+            .kalender-ploeg:last-child {
+                text-align: left;
+            }
+
+            .kalender-tegen {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="kalender-container">
+
+        <header class="kalender-header">
+            <a href="index.html" aria-label="Terug naar LOL CUP">
+                <img
+                    src="images/logo.png"
+                    alt="LOL CUP 2027"
+                    class="kalender-logo"
+                >
+            </a>
+
+            <a href="index.html" class="btn primary kalender-terug">
+                ← Terug naar de website
+            </a>
+        </header>
+
+        <section class="kalender-intro">
+            <h1>Wedstrijdkalender</h1>
+            <p>
+                Ontdek wanneer en waar de ploegen van LOL CUP 2027
+                het tegen elkaar opnemen.
+            </p>
+        </section>
+
+        <section aria-label="Geplande wedstrijden">
+            <div id="kalender-lijst" class="kalender-lijst">
+                <p class="kalender-melding">
+                    De wedstrijdkalender wordt geladen...
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="wedstrijden.js"></script>
+</body>
+</html>
