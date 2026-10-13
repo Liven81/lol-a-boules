@@ -1017,3 +1017,85 @@ html {
         padding: 12px;
     }
 }
+
+/* ========================================
+Teams - LOL CUP 2027
+======================================== */
+
+.team-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+gap: 16px;
+margin-top: 24px;
+}
+
+.team-kaart {
+display: flex;
+align-items: center;
+gap: 16px;
+padding: 20px;
+background: #fff;
+border: 1px solid #e8e8e2;
+border-left: 5px solid var(--green);
+border-radius: 14px;
+box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.team-kaart:nth-child(4n + 2) {
+border-left-color: var(--yellow);
+}
+
+.team-kaart:nth-child(4n + 3) {
+border-left-color: var(--blue);
+}
+
+.team-kaart:nth-child(4n + 4) {
+border-left-color: var(--red);
+}
+
+.team-kaart:hover {
+transform: translateY(-3px);
+box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.team-nummer {
+display: flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+width: 48px;
+height: 48px;
+border-radius: 12px;
+background: #edf5ef;
+color: var(--green);
+font-size: 17px;
+font-weight: 800;
+}
+
+.team-kaart:nth-child(4n + 2) .team-nummer {
+background: #fff7d9;
+color: #856600;
+}
+
+.team-kaart:nth-child(4n + 3) .team-nummer {
+background: #eaf1fc;
+color: var(--blue);
+}
+
+.team-kaart:nth-child(4n + 4) .team-nummer {
+background: #fcecea;
+color: var(--red);
+}
+
+.team-info h3 {
+margin: 0 0 5px;
+font-size: 17px;
+}
+
+.team-info p {
+margin: 0;
+color: #777;
+font-size: 13px;
+}
+
