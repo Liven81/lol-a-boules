@@ -1,172 +1,385 @@
+```html
 <!doctype html>
 <html lang="nl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <meta name="theme-color" content="#f7f7f2">
-  <title>LOL à boules 2027</title>
+  <meta name="description" content="LOL CUP 2027: de petanquecompetitie waar straten, vrienden en buren samenkomen. Van straat tot plein, samen moet het LOL zijn!">
+
+  <title>LOL CUP 2027</title>
+
+  <!-- Website-icoon -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <div class="topline" aria-hidden="true"></div>
+
   <div class="wrap">
+
+    <!-- HEADER -->
     <header>
-      <div class="brand">
-        <div class="mark" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
-        <div><div class="brand-name">LOL à boules</div><div class="brand-sub">Van straat tot plein, samen moet het LOL zijn!</div></div>
-      </div>
-      <button class="admin" id="adminButton" type="button">Beheerder ↗</button>
+      <a class="brand" href="./" aria-label="LOL CUP - home">
+        <img
+          class="brand-logo"
+          src="images/logo.png"
+          alt="LOL CUP - Van straat tot plein, samen moet het LOL zijn!"
+        >
+
+        <div class="brand-text">
+          <div class="brand-name">LOL CUP</div>
+          <div class="brand-sub">
+            Van straat tot plein, samen moet het LOL zijn!
+          </div>
+        </div>
+      </a>
+
+      <button class="admin" id="adminButton" type="button">
+        Beheerder ↗
+      </button>
     </header>
+
     <main>
+
+      <!-- INTRODUCTIE -->
       <section class="hero">
         <span class="eyebrow">Eerste editie · 2027</span>
-        <h1>Een beetje competitie.<br><span>Heel veel LOL.</span></h1>
-        <p>De petanquecompetitie waar straten, vrienden en buren samenkomen. Speel wanneer het past, kies je plein en maak er een sportief seizoen van.</p>
-        <div class="actions"><button class="btn primary" data-view="matches" type="button">Bekijk de wedstrijden →</button><button class="btn secondary" data-view="teams" type="button">Ontdek de teams</button></div>
+
+        <h1>
+          Een beetje competitie.<br>
+          <span>Heel veel LOL.</span>
+        </h1>
+
+        <p>
+          De petanquecompetitie waar straten, vrienden en buren samenkomen.
+          Speel wanneer het past, kies je plein en maak er een sportief
+          seizoen van.
+        </p>
+
+        <div class="actions">
+          <button class="btn primary" data-view="matches" type="button">
+            Bekijk de wedstrijden →
+          </button>
+
+          <button class="btn secondary" data-view="teams" type="button">
+            Ontdek de teams
+          </button>
+        </div>
       </section>
-      <div class="heading"><h2 id="sectionTitle">De competitie</h2></div>
+
+      <!-- NAVIGATIE -->
+      <div class="heading">
+        <h2 id="sectionTitle">De competitie</h2>
+      </div>
+
       <nav aria-label="Hoofdnavigatie">
-        <button class="active" data-view="overview" type="button">Overzicht</button>
-        <button data-view="standings" type="button">Klassement</button>
-        <button data-view="matches" type="button">Wedstrijdkalender</button>
-        <button data-view="locaties" type="button">Locaties</button>
-        <button data-view="teams" type="button">Teams</button>
+        <button class="active" data-view="overview" type="button">
+          Overzicht
+        </button>
+
+        <button data-view="standings" type="button">
+          Klassement
+        </button>
+
+        <button data-view="matches" type="button">
+          Wedstrijdkalender
+        </button>
+
+        <button data-view="locaties" type="button">
+          Locaties
+        </button>
+
+        <button data-view="teams" type="button">
+          Teams
+        </button>
       </nav>
+
+      <!-- OVERZICHT -->
       <section id="overviewView" class="grid">
-        <div class="panel"><h3>Het klassement</h3><p class="muted">Wie pakt de eerste overwinning? Het klassement verschijnt zodra de competitiegegevens beschikbaar zijn.</p><div class="empty"><div class="empty-icon">🏆</div><strong>De strijd moet nog beginnen</strong><p>De eerste editie wordt voorbereid. Binnenkort vind je hier de teams, resultaten en tussenstand.</p></div></div>
-        <div class="panel"><h3>In één oogopslag</h3><p class="muted">De spelregels van deze eerste editie.</p><div class="stats"><div class="stat"><b>13</b><span>punten om te winnen</span></div><div class="stat"><b>1</b><span>competitiepunt per zege</span></div><div class="stat"><b>10</b><span>speelpleinen</span></div></div><div class="dots" aria-label="Vier clubkleuren"><span style="background:var(--green)"></span><span style="background:var(--yellow)"></span><span style="background:var(--blue)"></span><span style="background:var(--red)"></span></div><div class="notice">📅 De competitie start in het voorjaar van 2027. De zomerplanning houdt rekening met vakanties.</div></div>
+
+        <div class="panel">
+          <h3>Het klassement</h3>
+
+          <p class="muted">
+            Wie pakt de eerste overwinning? Het klassement verschijnt
+            zodra de competitiegegevens beschikbaar zijn.
+          </p>
+
+          <div class="empty">
+            <div class="empty-icon">🏆</div>
+
+            <strong>De strijd moet nog beginnen</strong>
+
+            <p>
+              De eerste editie wordt voorbereid. Binnenkort vind je hier
+              de teams, resultaten en tussenstand.
+            </p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>In één oogopslag</h3>
+
+          <p class="muted">
+            De spelregels van deze eerste editie.
+          </p>
+
+          <div class="stats">
+            <div class="stat">
+              <b>13</b>
+              <span>punten om te winnen</span>
+            </div>
+
+            <div class="stat">
+              <b>1</b>
+              <span>competitiepunt per zege</span>
+            </div>
+
+            <div class="stat">
+              <b>10</b>
+              <span>speelpleinen</span>
+            </div>
+          </div>
+
+          <div class="dots" aria-label="Vier clubkleuren">
+            <span style="background:var(--green)"></span>
+            <span style="background:var(--yellow)"></span>
+            <span style="background:var(--blue)"></span>
+            <span style="background:var(--red)"></span>
+          </div>
+
+          <div class="notice">
+            📅 De competitie start in het voorjaar van 2027.
+            De zomerplanning houdt rekening met vakanties.
+          </div>
+        </div>
+
       </section>
- <section id="locatiesView" class="panel hidden">
-    <div class="heading">
-        <h2>Onze speellocaties</h2>
-        <p>Ontdek waar je een balletje kunt gooien.</p>
-    </div>
 
-    <div id="locatie-lijst">
-        <p>Locaties laden...</p>
-    </div>
-</section>
-      <section id="standingsView" class="panel hidden"><h3>Klassement 2027</h3><p class="muted">Zodra teams en uitslagen zijn ingevoerd, verschijnt hier het actuele klassement.</p><div class="empty"><div class="empty-icon">📊</div><strong>Nog geen klassement</strong><p>Er zijn nog geen teams of resultaten geregistreerd.</p></div></section>
+      <!-- LOCATIES -->
+      <section id="locatiesView" class="panel hidden">
+        <div class="heading">
+          <h2>Onze speellocaties</h2>
+          <p>Ontdek waar je een balletje kunt gooien.</p>
+        </div>
 
-<section id="matchesView" class="panel hidden">
-    <div class="heading" style="margin-top: 0;">
-        <h2>Wedstrijdkalender</h2>
-        <p>Plan een wedstrijd en reserveer meteen een beschikbaar speelplein.</p>
-    </div>
+        <div id="locatie-lijst">
+          <p>Locaties laden...</p>
+        </div>
+      </section>
 
-    <div class="wedstrijd-formulier">
-        <h3>Wedstrijd plannen</h3>
+      <!-- KLASSEMENT -->
+      <section id="standingsView" class="panel hidden">
+        <h3>Klassement 2027</h3>
 
-        <form id="wedstrijd-form">
+        <p class="muted">
+          Zodra teams en uitslagen zijn ingevoerd, verschijnt hier
+          het actuele klassement.
+        </p>
+
+        <div class="empty">
+          <div class="empty-icon">📊</div>
+
+          <strong>Nog geen klassement</strong>
+
+          <p>
+            Er zijn nog geen teams of resultaten geregistreerd.
+          </p>
+        </div>
+      </section>
+
+      <!-- WEDSTRIJDKALENDER -->
+      <section id="matchesView" class="panel hidden">
+
+        <div class="heading" style="margin-top:0">
+          <h2>Wedstrijdkalender</h2>
+
+          <p>
+            Plan een wedstrijd en reserveer meteen een beschikbaar speelplein.
+          </p>
+        </div>
+
+        <div class="wedstrijd-formulier">
+          <h3>Wedstrijd plannen</h3>
+
+          <form id="wedstrijd-form">
             <div class="formulier-grid">
 
-                <div class="form-veld">
-                    <label for="thuisploeg">Thuisploeg</label>
-                    <select id="thuisploeg" required>
-                        <option value="">Kies de thuisploeg</option>
-                    </select>
-                </div>
+              <div class="form-veld">
+                <label for="thuisploeg">Thuisploeg</label>
 
-                <div class="form-veld">
-                    <label for="uitploeg">Uitploeg</label>
-                    <select id="uitploeg" required>
-                        <option value="">Kies de uitploeg</option>
-                    </select>
-                </div>
+                <select id="thuisploeg" required>
+                  <option value="">Kies de thuisploeg</option>
+                </select>
+              </div>
 
-                <div class="form-veld">
-                    <label for="wedstrijd-datum">Datum</label>
-                    <input type="date" id="wedstrijd-datum" required>
-                </div>
+              <div class="form-veld">
+                <label for="uitploeg">Uitploeg</label>
 
-                <div class="form-veld">
-                    <label for="wedstrijd-uur">Startuur</label>
-                    <input type="time" id="wedstrijd-uur" required>
-                </div>
+                <select id="uitploeg" required>
+                  <option value="">Kies de uitploeg</option>
+                </select>
+              </div>
 
-                <div class="form-veld">
-                    <label for="wedstrijd-locatie">Speellocatie</label>
-                    <select id="wedstrijd-locatie" required>
-                        <option value="">Kies een locatie</option>
-                    </select>
-                </div>
+              <div class="form-veld">
+                <label for="wedstrijd-datum">Datum</label>
 
-                <div class="form-veld">
-                    <label for="wedstrijd-plein">Speelplein</label>
-                    <select id="wedstrijd-plein" required disabled>
-                        <option value="">Kies eerst een locatie</option>
-                    </select>
-                </div>
+                <input type="date" id="wedstrijd-datum" required>
+              </div>
+
+              <div class="form-veld">
+                <label for="wedstrijd-uur">Startuur</label>
+
+                <input type="time" id="wedstrijd-uur" required>
+              </div>
+
+              <div class="form-veld">
+                <label for="wedstrijd-locatie">Speellocatie</label>
+
+                <select id="wedstrijd-locatie" required>
+                  <option value="">Kies een locatie</option>
+                </select>
+              </div>
+
+              <div class="form-veld">
+                <label for="wedstrijd-plein">Speelplein</label>
+
+                <select id="wedstrijd-plein" required disabled>
+                  <option value="">Kies eerst een locatie</option>
+                </select>
+              </div>
 
             </div>
 
             <p class="formulier-info">
-                Een wedstrijd duurt standaard 90 minuten.
-                Het gekozen speelplein moet tijdens die periode beschikbaar zijn.
+              Een wedstrijd duurt standaard 90 minuten.
+              Het gekozen speelplein moet tijdens die periode beschikbaar zijn.
             </p>
 
-            <div id="wedstrijd-melding" class="wedstrijd-melding hidden"></div>
+            <div
+              id="wedstrijd-melding"
+              class="wedstrijd-melding hidden"
+            ></div>
 
-            <button type="submit" class="btn primary" id="wedstrijd-opslaan">
-                Wedstrijd plannen
+            <button
+              type="submit"
+              class="btn primary"
+              id="wedstrijd-opslaan"
+            >
+              Wedstrijd plannen
             </button>
-        </form>
-    </div>
+          </form>
+        </div>
 
-    <div class="heading">
-        <h2>Geplande wedstrijden</h2>
-    </div>
+        <div class="heading">
+          <h2>Geplande wedstrijden</h2>
+        </div>
 
-    <div id="wedstrijd-lijst">
-        <p class="muted">De geplande wedstrijden verschijnen hier.</p>
-    </div>
-</section>
-      <section id="teamsView" class="panel hidden"><h3>De teams</h3><p class="muted">Alle goedgekeurde teams van LOL à boules 2027 komen hier samen.</p><div class="empty"><div class="empty-icon">👥</div><strong>Welke teams doen mee?</strong><p>De teamlijst wordt zichtbaar zodra de inschrijvingen zijn ingevoerd en goedgekeurd.</p></div></section>
+        <div id="wedstrijd-lijst">
+          <p class="muted">
+            De geplande wedstrijden verschijnen hier.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- TEAMS -->
+      <section id="teamsView" class="panel hidden">
+        <h3>De teams</h3>
+
+        <p class="muted">
+          Alle goedgekeurde teams van LOL CUP 2027 komen hier samen.
+        </p>
+
+        <div class="empty">
+          <div class="empty-icon">👥</div>
+
+          <strong>Welke teams doen mee?</strong>
+
+          <p>
+            De teamlijst wordt zichtbaar zodra de inschrijvingen
+            zijn ingevoerd en goedgekeurd.
+          </p>
+        </div>
+      </section>
+
     </main>
-    <footer><span>LOL à boules 2027</span><span>Van straat tot plein, samen moet het LOL zijn!</span></footer>
+
+    <!-- FOOTER -->
+    <footer>
+      <span>LOL CUP 2027</span>
+      <span>Van straat tot plein, samen moet het LOL zijn!</span>
+    </footer>
+
   </div>
 
-<!-- Beheerderslogin -->
-<div id="login-venster" class="login-overlay hidden">
+  <!-- BEHEERDERSLOGIN -->
+  <div id="login-venster" class="login-overlay hidden">
     <div class="login-kaart">
-        <button type="button" id="login-sluiten" class="login-sluiten"
-                aria-label="Venster sluiten">&times;</button>
 
-        <h2>Beheer LOL à boules</h2>
-        <p>Log in om de competitie te beheren.</p>
+      <button
+        type="button"
+        id="login-sluiten"
+        class="login-sluiten"
+        aria-label="Venster sluiten"
+      >
+        &times;
+      </button>
 
-        <form id="login-formulier">
-            <div class="form-veld">
-                <label for="login-email">E-mailadres</label>
-                <input
-                    type="email"
-                    id="login-email"
-                    autocomplete="username"
-                    required
-                >
-            </div>
+      <h2>Beheer LOL CUP</h2>
 
-            <div class="form-veld">
-                <label for="login-wachtwoord">Wachtwoord</label>
-                <input
-                    type="password"
-                    id="login-wachtwoord"
-                    autocomplete="current-password"
-                    required
-                >
-            </div>
+      <p>Log in om de competitie te beheren.</p>
 
-            <p id="login-melding" class="wedstrijd-melding hidden"></p>
+      <form id="login-formulier">
 
-            <button type="submit" id="login-knop" class="btn primary">
-                Inloggen
-            </button>
-        </form>
+        <div class="form-veld">
+          <label for="login-email">E-mailadres</label>
+
+          <input
+            type="email"
+            id="login-email"
+            autocomplete="username"
+            required
+          >
+        </div>
+
+        <div class="form-veld">
+          <label for="login-wachtwoord">Wachtwoord</label>
+
+          <input
+            type="password"
+            id="login-wachtwoord"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <p
+          id="login-melding"
+          class="wedstrijd-melding hidden"
+        ></p>
+
+        <button
+          type="submit"
+          id="login-knop"
+          class="btn primary"
+        >
+          Inloggen
+        </button>
+
+      </form>
     </div>
-</div>
-  
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js"></script>
-  
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+
 </body>
 </html>
+```
