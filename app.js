@@ -322,43 +322,57 @@ async function laadWedstrijdFormulier() {
     const thuisSelect = document.getElementById("thuisploeg");
     const uitSelect = document.getElementById("uitploeg");
     const locatieSelect = document.getElementById("wedstrijd-locatie");
-    const pleinSelect = document.getElementById("wedstrijd-plein");
 
-    // Als het formulier niet op de pagina staat, niets doen
-    if (!thuisSelect || !uitSelect || !locatieSelect || !pleinSelect) {
+    const datumInput = document.getElementById("wedstrijd-datum");
+    const uurInput = document.getElementById("wedstrijd-uur");
+    const beschikbaarheidInfo =
+        document.getElementById("beschikbaarheid-info");
+
+    if (
+        !thuisSelect ||
+        !uitSelect ||
+        !locatieSelect ||
+        !datumInput ||
+        !uurInput
+    ) {
         return;
     }
 
     // Competitie ophalen
-    const { data: competities, error: competitieFout } = await supabaseClient
-        .from("competitions")
-        .select("id, name")
-        .eq("season_year", 2027)
-        .limit(1);
+    const { data: competities, error: competitieFout } =
+        await supabaseClient
+            .from("competitions")
+            .select("id, name")
+            .eq("season_year", 2027)
+            .limit(1);
 
     if (competitieFout || !competities || competities.length === 0) {
-        console.error("Competitie laden mislukt:", competitieFout, competities);
+        console.error("Competitie laden mislukt:", competitieFout);
         toonWedstrijdMelding("De competitie kon niet worden geladen.");
         return;
     }
 
     const competitieId = competities[0].id;
 
-    // Teams van deze competitie ophalen
-    const { data: teams, error: teamsFout } = await supabaseClient
-        .from("teams")
-        .select("id, name")
-        .eq("competition_id", competitieId)
-        .order("name");
+    // Teams ophalen
+    const { data: teams, error: teamsFout } =
+        await supabaseClient
+            .from("teams")
+            .select("id, name")
+            .eq("competition_id", competitieId)
+            .eq("status", "approved")
+            .order("name");
 
     if (teamsFout) {
-        console.error("Teams laden mislukt:", teamsFout.message);
+        console.error("Teams laden mislukt:", teamsFout);
         toonWedstrijdMelding("De teams konden niet worden geladen.");
         return;
     }
 
     const teamOpties = (teams || [])
-        .map(team => `<option value="${team.id}">${escapeHtml(team.name)}</option>`)
+        .map(team =>
+            `<option value="${team.id}">${escapeHtml(team.name)}</option>`
+        )
         .join("");
 
     thuisSelect.innerHTML =
@@ -367,88 +381,125 @@ async function laadWedstrijdFormulier() {
     uitSelect.innerHTML =
         '<option value="">Kies de uitploeg</option>' + teamOpties;
 
-    // Voorkomen dat dezelfde ploeg twee keer gekozen wordt
-function updateTeamKeuzes() {
-    const thuisId = thuisSelect.value;
-    const uitId = uitSelect.value;
+    // Dezelfde ploeg mag niet twee keer gekozen worden
+    function updateTeamKeuzes() {
+        if (thuisSelect.value && thuisSelect.value === uitSelect.value) {
+            uitSelect.value = "";
+        }
 
-    // Als beide ploegen gelijk zijn, de andere keuze wissen
-    if (thuisId && thuisId === uitId) {
-        uitSelect.value = "";
+        Array.from(uitSelect.options).forEach(optie => {
+            optie.disabled =
+                optie.value !== "" &&
+                optie.value === thuisSelect.value;
+        });
+
+        Array.from(thuisSelect.options).forEach(optie => {
+            optie.disabled =
+                optie.value !== "" &&
+                optie.value === uitSelect.value;
+        });
     }
 
-    // De gekozen thuisploeg uitsluiten bij de uitploeg
-    Array.from(uitSelect.options).forEach(optie => {
-        optie.disabled =
-            optie.value !== "" && optie.value === thuisSelect.value;
-    });
+    thuisSelect.addEventListener("change", updateTeamKeuzes);
+    uitSelect.addEventListener("change", updateTeamKeuzes);
 
-    // De gekozen uitploeg uitsluiten bij de thuisploeg
-    Array.from(thuisSelect.options).forEach(optie => {
-        optie.disabled =
-            optie.value !== "" && optie.value === uitSelect.value;
-    });
-}
-
-thuisSelect.addEventListener("change", updateTeamKeuzes);
-uitSelect.addEventListener("change", updateTeamKeuzes);
-
-updateTeamKeuzes();
+    updateTeamKeuzes();
 
     // Actieve locaties ophalen
-    const { data: locaties, error: locatiesFout } = await supabaseClient
-        .from("venues")
-        .select("id, name")
-        .eq("is_active", true)
-        .order("name");
+    const { data: locaties, error: locatiesFout } =
+        await supabaseClient
+            .from("venues")
+            .select("id, name")
+            .eq("is_active", true)
+            .order("name");
 
     if (locatiesFout) {
-        console.error("Locaties laden mislukt:", locatiesFout.message);
+        console.error("Locaties laden mislukt:", locatiesFout);
         toonWedstrijdMelding("De speellocaties konden niet worden geladen.");
         return;
     }
 
     locatieSelect.innerHTML =
         '<option value="">Kies een locatie</option>' +
-        (locaties || []).map(locatie =>
-            `<option value="${locatie.id}">${escapeHtml(locatie.name)}</option>`
-        ).join("");
+        (locaties || [])
+            .map(locatie =>
+                `<option value="${locatie.id}">${escapeHtml(locatie.name)}</option>`
+            )
+            .join("");
 
-    // Bij locatiekeuze de bijbehorende speelpleinen ophalen
-    locatieSelect.addEventListener("change", async () => {
+    // Beschikbaarheid controleren wanneer locatie, datum of uur verandert
+    async function controleerBeschikbaarheid() {
+        if (!beschikbaarheidInfo) {
+            return;
+        }
+
         const locatieId = locatieSelect.value;
+        const datum = datumInput.value;
+        const uur = uurInput.value;
 
-        pleinSelect.innerHTML = '<option value="">Pleinen laden...</option>';
-        pleinSelect.disabled = true;
-
-        if (!locatieId) {
-            pleinSelect.innerHTML =
-                '<option value="">Kies eerst een locatie</option>';
+        if (!locatieId || !datum || !uur) {
+            beschikbaarheidInfo.textContent =
+                "Kies een locatie, datum en startuur om de beschikbaarheid te controleren.";
             return;
         }
 
-        const { data: pleinen, error: pleinenFout } = await supabaseClient
-            .from("courts")
-            .select("id, name")
-            .eq("venue_id", locatieId)
-            .eq("is_active", true)
-            .order("name");
+        const startTijd = new Date(`${datum}T${uur}`);
 
-        if (pleinenFout) {
-            console.error("Speelpleinen laden mislukt:", pleinenFout.message);
-            pleinSelect.innerHTML =
-                '<option value="">Pleinen konden niet worden geladen</option>';
+        if (Number.isNaN(startTijd.getTime())) {
+            beschikbaarheidInfo.textContent =
+                "De gekozen datum of het startuur is ongeldig.";
             return;
         }
 
-        pleinSelect.innerHTML =
-            '<option value="">Kies een speelplein</option>' +
-            (pleinen || []).map(plein =>
-                `<option value="${plein.id}">${escapeHtml(plein.name)}</option>`
-            ).join("");
+        if (startTijd <= new Date()) {
+            beschikbaarheidInfo.textContent =
+                "Kies een datum en startuur in de toekomst.";
+            return;
+        }
 
-        pleinSelect.disabled = !pleinen || pleinen.length === 0;
-    });
+        beschikbaarheidInfo.textContent =
+            "Beschikbaarheid controleren...";
+
+        const { data, error } = await supabaseClient.rpc(
+            "get_lol_cup_court_availability",
+            {
+                p_venue_id: locatieId,
+                p_scheduled_at: startTijd.toISOString()
+            }
+        );
+
+        if (error) {
+            console.error("Beschikbaarheid controleren mislukt:", error);
+
+            beschikbaarheidInfo.textContent =
+                "De beschikbaarheid kon niet worden gecontroleerd. Probeer opnieuw.";
+            return;
+        }
+
+        const totaal = Number(data?.total_courts);
+        const beschikbaar = Number(data?.available_courts);
+
+        if (!Number.isFinite(totaal) || !Number.isFinite(beschikbaar)) {
+            beschikbaarheidInfo.textContent =
+                "De beschikbaarheid kon niet worden bepaald.";
+            return;
+        }
+
+        if (totaal === 0) {
+            beschikbaarheidInfo.textContent =
+                "Deze locatie heeft geen actieve speelpleinen.";
+        } else if (beschikbaar === 0) {
+            beschikbaarheidInfo.textContent =
+                `Geen speelpleinen beschikbaar. Alle ${totaal} speelpleinen zijn bezet op dit tijdstip.`;
+        } else {
+            beschikbaarheidInfo.textContent =
+                `Nog ${beschikbaar} van de ${totaal} speelpleinen beschikbaar op deze locatie.`;
+        }
+    }
+
+    locatieSelect.addEventListener("change", controleerBeschikbaarheid);
+    datumInput.addEventListener("change", controleerBeschikbaarheid);
+    uurInput.addEventListener("change", controleerBeschikbaarheid);
 }
 
 // HTML-tekens veilig weergeven
@@ -481,134 +532,148 @@ laadWedstrijdFormulier();
 // Wedstrijd opslaan
 // ========================================
 
-document.getElementById("wedstrijd-form")?.addEventListener("submit", async function (event) {
-    event.preventDefault();
+document.getElementById("wedstrijd-form")?.addEventListener(
+    "submit",
+    async function (event) {
+        event.preventDefault();
 
-    const knop = document.getElementById("wedstrijd-opslaan");
-    const melding = document.getElementById("wedstrijd-melding");
+        const formulier = document.getElementById("wedstrijd-form");
+        const knop = document.getElementById("wedstrijd-opslaan");
 
-    const thuisploeg = document.getElementById("thuisploeg").value;
-    const uitploeg = document.getElementById("uitploeg").value;
-    const datum = document.getElementById("wedstrijd-datum").value;
-    const uur = document.getElementById("wedstrijd-uur").value;
-    const locatie = document.getElementById("wedstrijd-locatie").value;
-    const plein = document.getElementById("wedstrijd-plein").value;
+        const thuisploeg = document.getElementById("thuisploeg").value;
+        const uitploeg = document.getElementById("uitploeg").value;
+        const datum = document.getElementById("wedstrijd-datum").value;
+        const uur = document.getElementById("wedstrijd-uur").value;
+        const locatie = document.getElementById("wedstrijd-locatie").value;
 
-    // Oude melding wissen
-    melding.textContent = "";
-    melding.classList.add("hidden");
+        const melding = document.getElementById("wedstrijd-melding");
+        const beschikbaarheidInfo =
+            document.getElementById("beschikbaarheid-info");
 
-    // Controleren of beide ploegen verschillend zijn
-    if (thuisploeg === uitploeg) {
-        toonWedstrijdMelding(
-            "Een ploeg kan niet tegen zichzelf spelen. Kies twee verschillende ploegen."
-        );
-        return;
-    }
-
-    // Controleren of alle gegevens ingevuld zijn
-    if (!thuisploeg || !uitploeg || !datum || !uur || !locatie || !plein) {
-        toonWedstrijdMelding(
-            "Vul alle gegevens in voordat je de wedstrijd plant."
-        );
-        return;
-    }
-
-    // Datum en uur omzetten naar een tijdstip
-    const startTijd = new Date(`${datum}T${uur}`);
-
-    if (Number.isNaN(startTijd.getTime())) {
-        toonWedstrijdMelding("De datum of het startuur is ongeldig.");
-        return;
-    }
-
-    if (startTijd <= new Date()) {
-        toonWedstrijdMelding(
-            "Kies een datum en startuur in de toekomst."
-        );
-        return;
-    }
-
-    // Knop tijdelijk uitschakelen om dubbel klikken te voorkomen
-    knop.disabled = true;
-    knop.textContent = "Wedstrijd opslaan...";
-
-    try {
-                // Extra controle voordat een wedstrijd wordt opgeslagen
-        const heeftToegang = await controleerBeheerder();
-
-        if (!heeftToegang) {
-            throw new Error(
-                "Je moet ingelogd zijn als LOL CUP-beheerder om wedstrijden te plannen."
-            );
-        }
-        // De competitie ophalen
-        const { data: competities, error: competitieFout } =
-            await supabaseClient
-                .from("competitions")
-                .select("id")
-                .eq("season_year", 2027)
-                .limit(1);
-
-        if (competitieFout) {
-            throw competitieFout;
-        }
-
-        if (!competities || competities.length === 0) {
-            throw new Error("De competitie van 2027 werd niet gevonden.");
-        }
-
-        // De wedstrijd opslaan
-        const { error: opslaanFout } = await supabaseClient
-            .from("matches")
-            .insert({
-                competition_id: competities[0].id,
-                home_team_id: thuisploeg,
-                away_team_id: uitploeg,
-                scheduled_at: startTijd.toISOString(),
-                court_id: plein
-            });
-
-        if (opslaanFout) {
-            throw opslaanFout;
-        }
-
-        // Gelukt!
-        toonWedstrijdMelding(
-            "De wedstrijd is succesvol gepland! Je kunt hieronder een nieuwe wedstrijd plannen."
-        );
-
-        // Het formulier leegmaken
-        document.getElementById("wedstrijd-form").reset();
-
-        // Speelplein opnieuw uitschakelen tot er een locatie gekozen is
-        const pleinSelect = document.getElementById("wedstrijd-plein");
-        pleinSelect.innerHTML =
-            '<option value="">Kies eerst een locatie</option>';
-        pleinSelect.disabled = true;
-
-    } catch (fout) {
-        console.error("Wedstrijd opslaan mislukt:", fout);
-
-        let bericht = "De wedstrijd kon niet worden opgeslagen.";
+        melding.textContent = "";
+        melding.classList.add("hidden");
 
         if (
-            fout.message &&
-            fout.message.includes("Dit speelplein is op dat tijdstip al gereserveerd")
+            !thuisploeg ||
+            !uitploeg ||
+            !datum ||
+            !uur ||
+            !locatie
         ) {
-            bericht =
-                "Dit speelplein is op dat tijdstip al gereserveerd. Kies een ander plein of tijdstip.";
-        } else if (fout.message) {
-            bericht += " Details: " + fout.message;
+            toonWedstrijdMelding(
+                "Vul alle gegevens in voordat je de wedstrijd plant."
+            );
+            return;
         }
 
-        toonWedstrijdMelding(bericht);
+        if (thuisploeg === uitploeg) {
+            toonWedstrijdMelding(
+                "Een ploeg kan niet tegen zichzelf spelen. Kies twee verschillende ploegen."
+            );
+            return;
+        }
 
-    } finally {
-        knop.disabled = false;
-        knop.textContent = "Wedstrijd plannen";
+        const startTijd = new Date(`${datum}T${uur}`);
+
+        if (Number.isNaN(startTijd.getTime())) {
+            toonWedstrijdMelding("De datum of het startuur is ongeldig.");
+            return;
+        }
+
+        if (startTijd <= new Date()) {
+            toonWedstrijdMelding(
+                "Kies een datum en startuur in de toekomst."
+            );
+            return;
+        }
+
+        knop.disabled = true;
+        knop.textContent = "Wedstrijd opslaan...";
+
+        try {
+            // Extra controle op de beheerdersrechten
+            const heeftToegang = await controleerBeheerder();
+
+            if (!heeftToegang) {
+                throw new Error(
+                    "Je moet ingelogd zijn als LOL CUP-beheerder om wedstrijden te plannen."
+                );
+            }
+
+            // Beschikbaarheid opnieuw controleren voor een duidelijke melding
+            const { data: beschikbaarheid, error: beschikbaarheidFout } =
+                await supabaseClient.rpc(
+                    "get_lol_cup_court_availability",
+                    {
+                        p_venue_id: locatie,
+                        p_scheduled_at: startTijd.toISOString()
+                    }
+                );
+
+            if (beschikbaarheidFout) {
+                throw beschikbaarheidFout;
+            }
+
+            if (
+                !beschikbaarheid ||
+                Number(beschikbaarheid.available_courts) <= 0
+            ) {
+                throw new Error(
+                    "Geen speelpleinen beschikbaar op deze locatie en dit tijdstip. Kies een ander uur of een andere locatie."
+                );
+            }
+
+            // De database kiest zelf een vrij speelplein en slaat de wedstrijd op
+            const { data: resultaat, error: opslaanFout } =
+                await supabaseClient.rpc(
+                    "plan_lol_cup_match",
+                    {
+                        p_home_team_id: thuisploeg,
+                        p_away_team_id: uitploeg,
+                        p_scheduled_at: startTijd.toISOString(),
+                        p_venue_id: locatie
+                    }
+                );
+
+            if (opslaanFout) {
+                throw opslaanFout;
+            }
+
+            const resterend = Number(resultaat?.available_courts);
+
+            toonWedstrijdMelding(
+                "De wedstrijd is succesvol gepland! " +
+                (
+                    Number.isFinite(resterend)
+                        ? `Er zijn na deze reservatie nog ${resterend} speelpleinen beschikbaar op deze locatie.`
+                        : "Een vrij speelplein werd automatisch toegewezen."
+                )
+            );
+
+            formulier.reset();
+
+            if (beschikbaarheidInfo) {
+                beschikbaarheidInfo.textContent =
+                    "Kies een locatie, datum en startuur om de beschikbaarheid te controleren.";
+            }
+
+        } catch (fout) {
+            console.error("Wedstrijd opslaan mislukt:", fout);
+
+            let bericht = "De wedstrijd kon niet worden opgeslagen.";
+
+            if (fout.message) {
+                bericht = fout.message;
+            }
+
+            toonWedstrijdMelding(bericht);
+
+        } finally {
+            knop.disabled = false;
+            knop.textContent = "Wedstrijd plannen";
+        }
     }
-});
+);
 
 // ========================================
 // Beheerderslogin via Supabase
